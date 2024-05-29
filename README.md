@@ -1,4 +1,4 @@
-# COMP639S1_Group_AQ Project 1 - Swimming Club Management System
+# Swimming Club Management System
 * Update 277/3/2024 New single SQL file now available with loads of sample data, please check Step 5
 ## Getting started
 ### 1. Clone the repo
