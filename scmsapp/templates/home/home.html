@@ -1,0 +1,182 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+<section>
+  <div id="myCarousel" class="carousel slide">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div style="max-height: 700px;margin: 0 auto;">
+          <img src="{{ url_for('static', filename='images/homepage/slide1_image.jpg') }}" class="d-block w-100"
+            alt="...">
+        </div>
+        <div class="carousel-caption d-none d-md-block" style="bottom: 30% !important;">
+          <h1>Much more than just swimming!</h1>
+          <p class="mt-4" style="font-size: 26px;">Zumba, aqua fit, low-impact, mums and babies and various aqua
+            aerobics
+            classes!
+          </p>
+          <div class="d-flex justify-content-center">
+            <a class="btn custom-btn" href="{{url_for('login')}}">Get Started</a>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div style="max-height: 700px;margin: 0 auto;">
+          <img src="{{ url_for('static', filename='images/homepage/slide2_image.jpeg') }}" class="d-block w-100"
+            alt="...">
+        </div>
+        <div class="carousel-caption d-none d-md-block" style="bottom: 30% !important;">
+          <h1>A complex of deep pool and lane pool.</h1>
+          <p class="mt-4" style="font-size: 26px;">Fun for adults and kids of all ages!</p>
+          <div class="d-flex justify-content-center">
+            <a class="btn custom-btn" href="{{url_for('login')}}">Get Started</a>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div style="max-height: 700px;margin: 0 auto;">
+          <img src="{{ url_for('static', filename='images/homepage/slide3_image.jpeg') }}" class="d-block w-100"
+            alt="...">
+        </div>
+        <div class="carousel-caption d-none d-md-block" style="bottom: 30% !important;">
+          <h1>Swim All year!</h1>
+          <p class="mt-4" style="font-size: 26px;">Subscribe now or contact us to learn more</p>
+          <div class="d-flex justify-content-center">
+            <a class="btn custom-btn" href="{{url_for('login')}}">Get Started</a>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div style="max-height: 700px;margin: 0 auto;">
+          <img src="{{ url_for('static', filename='images/homepage/slide4_image.jpeg') }}" class="d-block w-100"
+            alt="...">
+        </div>
+        <div class="carousel-caption d-none d-md-block" style="bottom: 30% !important;">
+          <h1>Swim One-on-one Lessons</h1>
+          <p class="mt-4" style="font-size: 26px;">Get some exercise for this summer!</p>
+          <div class="d-flex justify-content-center">
+            <a class="btn custom-btn" href="{{url_for('login')}}">Get Started</a>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div style="max-height: 700px;margin: 0 auto;">
+          <img src="{{ url_for('static', filename='images/homepage/slide5_image.jpeg') }}" class="d-block w-100"
+            alt="...">
+        </div>
+        <div class="carousel-caption d-none d-md-block" style="bottom: 30% !important;">
+          <h1>Community Swim Club</h1>
+          <p class="mt-4" style="font-size: 26px;">Meet your neighbors and make lasting memories</p>
+          <div class="d-flex justify-content-center">
+            <a class="btn custom-btn" href="{{url_for('login')}}">Get Started</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</section>
+
+<section>
+  <div class="container py-md-1 py-xl-5">
+    <div class="text-center my-4 fw-bold" style="font-size: 3rem;"> Meet Our Instructor</div>
+    <div class="d-flex scroll-box">
+      {% set default_image = url_for('static', filename='images/profile_images/default.jpg') %}
+      {% for instructor in instructorsinfo %}
+      <div class="features-image scroll-item">
+        <div class="mb-3">
+              <img
+                src="{{ url_for('static', filename='images/profile_images/' + instructor.user_id|string + '/' + instructor.image) }}"
+                alt="..." style="border-radius: 2rem !important; width: 100%; height: 400px; object-fit: cover;"
+                onerror="this.src='{{default_image}}'">
+            </div>
+            <div class="text-center">
+              <div class="my-md-1 my-lg-3">{{instructor.position}}</div>
+              <div class="fw-bold">{{instructor.title}} {{instructor.last_name}}
+                {{instructor.first_name}}</div>
+              <div class="my-md-1 my-lg-3">{{instructor.profile}}</div>
+              <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+            </div>
+          </div>
+          {% endfor %}
+      </div>
+  </div>
+</section>
+
+<section style="background-color: #467599;">
+  <div class="container py-md-1 py-xl-3">
+    <div class="text-center fw-bold" style="font-size: 3rem;">Our Lessons</div>
+    <div class="d-flex scroll-box">
+      {% set default_image = url_for('static', filename='images/profile_images/default.jpg') %}
+      {% for lesson in lessonsinfo %}
+      <div class="scroll-item">
+        <div class="text-center py-3 my-3"
+          style="height: 300px; margin: 0 20px; border-radius: 2rem !important; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5); background-color: white;">
+          <i class="bi bi-person-fill" style="width: 10px;"></i>
+          <div class="my-md-1 my-lg-3">{{lesson.class_type}}</div>
+          <div class="fw-bold">{{lesson.class_name}}</div>
+          <div class="m-md-1 m-lg-3">{{lesson.description}}</div>
+            <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+          </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  h1 {
+    font-size: 60px;
+    font-weight: 800;
+  }
+
+  p {
+    font-size: 35px;
+    font-weight: 400;
+  }
+
+  /* Custom CSS for button */
+  .custom-btn {
+    border-radius: 20px;
+    /* Adjust the border radius as needed */
+    background-color: #b9272c;
+    /* Dark blue background */
+    color: #fff;
+    /* White text */
+    transition: background-color 0.3s, color 0.3s;
+    /* Smooth transition */
+    margin: 30px 60px;
+    padding: 10px 40px;
+    font-weight: 500;
+  }
+
+  .custom-btn:hover {
+    background-color: #fff;
+    /* White background on hover */
+    color: #b9272c;
+    /* Blue text on hover */
+  }
+
+  .scroll-box {
+    overflow-x: scroll; 
+    white-space: wrap;
+    }
+
+  .scroll-item {
+    min-width: 300px; 
+    height: 100%; 
+    margin-right: 30px; 
+    box-sizing: border-box; 
+    transition: 5s ease-in-out all;
+    }
+</style>
+
+{% endblock %}

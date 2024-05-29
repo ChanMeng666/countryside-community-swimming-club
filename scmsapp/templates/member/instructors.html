@@ -1,0 +1,50 @@
+{% extends '/member/base.html' %}
+{% block title %}Countryside Community Swimming Club  - User Profile{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+<section style="margin-top: 20px;">
+    <div class="container">
+        <div class="row">
+            <div class="model model-bgcolor">
+                <h4 class="p-3 model-text">Instructor</h4>
+                <div class="list-group px-3 pb-2">
+                    {% for data in instructorsList %}
+                    <a href="/instructor-profile/{{data.id}}" class="list-group-item list-group-item-action model-bgcolor"
+                        style="border-left: 0 !important; border-right: 0 !important; border-top-left-radius: 0; border-top-right-radius: 0;"
+                        aria-current="true">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex">
+                                <div style="max-width:60px;">
+                                    {% set default_image = url_for('static', filename='images/profile_images/default.jpg') %}
+                                    {% if data.image %}
+                                    <img src="{{ url_for('static', filename='images/profile_images/' + data.user_id|string + '/' +data.image) }}"
+                                        class="d-block w-100" alt="..." style="max-height: 100%; max-width: 100%; height: auto;" onerror="this.src='{{default_image}}'">
+                                    {% else %}
+                                    <img src="{{ url_for('static', filename='images/profile_images/default.jpg') }}" class="d-block w-100" alt="..."
+                                    style="max-height: 100%; max-width: 100%; height: auto;">
+                                    {% endif %}
+                                </div>
+                                <div class="m-1">
+                                    <div style="font-size: small;">
+                                        {{data.position}}
+                                    </div>
+                                    <div style="font-size: larger; font-weight: 700;">
+                                        {{data.title}} {{data.last_name}} {{data.first_name}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="my-auto">
+                                <button class="btn btn-success">Book Now <i class="fas fa-angle-right"></i></button>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

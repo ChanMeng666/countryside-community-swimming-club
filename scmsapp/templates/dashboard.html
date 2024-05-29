@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block css %}
+<style>
+    .image-container {
+        text-align: center;
+        position: relative;
+        display: inline-block;
+        border-radius: 12px;
+        /* width: calc(100%-100PX);
+        height: 100%; */
+        /* Rounded corners */
+        overflow: hidden;
+        /* Clip content that exceeds the rounded corners */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: calc(100%);
+    }
+
+    .image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 350px;
+        object-fit: cover;
+        /* Cover the entire container */
+    }
+
+    .greeting-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-size: cover;
+        color: rgb(255, 255, 255);
+        padding: 10px;
+        font-weight: bold;
+        font-size: 40px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="top"></div>
+
+
+<div class="overview">
+    <div class="title">
+        <i class="fas fa-home"></i>
+        <span class="text">Dashboard</span>
+    </div>
+    <div class="image-container">
+        <img id="greetingImage" src="../static/images/dashboard/swim-dashboard.jpg" alt="Image">
+        <div class="greeting-text" id="greetingText"></div>
+    </div>
+    <div class="title">
+        <i class="fas fa-swimming-pool"></i>
+        <span class="text">Quick Actions</span>
+    </div>
+    <div class="boxes">
+        {% if session['role'] == 'manager'%}
+        <div class="box box1">
+            <a href="{{ url_for('all_instructors') }}">
+                <i class="fas fa-user-tie"></i>
+                <span class="text">Instructor</span>
+                <!-- <span class="number"></span> -->
+            </a>
+        </div>
+        <div class="box box2">
+            <a href="{{ url_for('all_members') }}">
+                <i class="fas fa-users"></i>
+                <span class="text">Member</span>
+                <!-- <span class="number"></span> -->
+            </a>
+        </div>
+        <div class="box box3">
+            <a href="{{ url_for('all_reports') }}">
+                <i class="fas fa-chart-bar"></i>
+                <span class="text">Report</span>
+                <!-- <span class="number"></span> -->
+            </a>
+        </div>
+
+        <div class="box box4">
+            <a href="{{ url_for('timetable') }}">
+                <i class="fas fa-swimmer"></i>
+                <span class="text">Class</span>
+                <!-- <span class="number"></span> -->
+            </a>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if session['role'] == 'instructor' %}
+    <div class="box box4">
+        <a href="{{ url_for('timetable_instructor') }}">
+            <i class="fas fa-swimmer"></i>
+            <span class="text">Class</span>
+            <!-- <span class="number"></span> -->
+        </a>
+    </div>
+    {% endif %}
+    {% endblock %}
+
+    {% block js %}
+    <script>
+        function getGreeting() {
+            var date = new Date();
+            var hour = date.getHours();
+            var greeting;
+
+            if (hour < 12) {
+                greeting = "Good morning!";
+            } else if (hour < 18) {
+                greeting = "Good afternoon!";
+            } else {
+                greeting = "Good evening!";
+            }
+            var greetingText = document.getElementById("greetingText");
+            greetingText.innerText = 'Hello, {{ Fullname }}\n' + greeting;
+        }
+        window.onload = getGreeting;
+    </script>
+    {% endblock %}

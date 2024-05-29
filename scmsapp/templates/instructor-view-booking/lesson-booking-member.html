@@ -1,0 +1,21 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            {% set default_image = url_for('static', filename='images/profile_images/default.jpg') %}
+            {% if member.image  %}
+                <img class="img-fluid mb-3" src="{{ url_for('static', filename='images/profile_images/'+member.user_id|string+'/'+member.image) }}" onerror="this.src='{{default_image}}'">
+            {% else %}
+                <img class="img-fluid mb-3" src="{{url_for('static', filename='images/profile_images/default.jpg')}}" >
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <p><strong>Name:</strong> {{ member.first_name }} {{member.last_name}}</p>
+            <p><strong>Position:</strong> {{ member.position }}</p>
+            <p><strong>Phone:</strong> {{ member.phone }}</p>
+            <p><strong>Email:</strong> {{ member.email }}</p>
+            <p><strong>Address:</strong> {{ member.address }}</p>
+            <p><strong>Date of Birth:</strong> {{ member.dob.strftime('%Y-%m-%d') }}</p>
+            <p><strong>Health Information:</strong> {{ member.health_info }}</p>
+        </div>
+    </div>
+</div>

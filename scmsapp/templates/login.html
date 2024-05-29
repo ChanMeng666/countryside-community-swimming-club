@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="../static/css/login.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <style>
+    </style>
+</head>
+
+<body class="signin-signup">
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form id="registrationForm" action="{{url_for('register')}}" method="post">
+                <a href="{{url_for('home')}}" class="logo-link">
+                    <img src="../static/images/Club_Logo.svg" alt="Home" class="logo">
+                </a>
+                <h1>Create Account</h1>
+                <div class="input-container">
+                    <label for="sign_up_username"><i class="fas fa-user"></i></label>&nbsp;
+                    <span class="required">*</span>
+                    <input type="text" name="sign_up_username" placeholder="Username" id="sign_up_username" required>
+                </div>
+
+                <div class="input-container">
+                    <label for="sign_up_password"><i class="fas fa-lock"></i></label>&nbsp;
+                    <span class="required">*</span>
+                    <input type="password" name="sign_up_password" placeholder="Password" id="sign_up_password"
+                        required>
+                </div>
+
+                <div class="input-container">
+                    <label for="phone"><i class="fas fa-phone-volume"></i></label>&nbsp;
+                    <span class="required">*</span>
+                    <input type="tel" name="phone" placeholder="Phone" id="phone" required>
+                </div>
+
+                <div class="input-container">
+                    <label for="email"><i class="fas fa-envelope"></i></label>&nbsp;
+                    <span class="required">*</span>
+                    <input type="email" name="email" placeholder="Email" id="email" required>
+                </div>
+
+                <div class="input-container">
+                    <label for="lastname"><i class="fas fa-signature"></i></label>&nbsp;
+                    <input type="text" style="width: 50%; margin-right: 5px;" name="firstname" placeholder="First Name"
+                        id="firstname">
+                    <span class="required">*</span>
+                    <input type="text" style="width: 50%;" name="lastname" placeholder="Last Name" id="lastname"
+                        required>
+                </div>
+
+                <div class="input-container">
+                    <label for="address"><i class="fas fa-map-marked-alt"></i></label>&nbsp;
+                    <span class="required">*</span>
+                    <input type="address" name="address" placeholder="Address" id="address" required>
+                </div>
+
+                <div id="registrationMessage"></div>
+                <button class="sign-up-button" type="submit">Sign Up</button>
+            </form>
+        </div>
+
+        <div class="form-container sign-in-container">
+            <form action="{{url_for('login')}}" method="post">
+                <a href="{{url_for('home')}}" class="logo-link">
+                    <img src="../static/images/Club_Logo.svg" alt="Home" class="logo">
+                </a>
+                <h1>Sign in</h1>
+                <div class="input-container">
+                    <label for="sign_in_username"><i class="fas fa-user"></i></label>&nbsp;
+                    <input type="text" name="sign_in_username" placeholder="Username" id="sign_in_username" required />
+                </div>
+                <div class="input-container">
+                    <label for="sign_in_password"><i class="fas fa-lock"></i></label>&nbsp;
+                    <input type="password" name="sign_in_password" placeholder="Password" id="sign_in_password"
+                        required />
+                </div>
+                <div class="msg">{{ sign_in_msg }}</div>
+                <button class="sign-in-button" type="submit">Sign In</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>Please login with your personal info</p>
+                    <button class="ghost" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Enter your details and start journey with us</p>
+                    <button class="ghost" id="signUp">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
+
+
+        signUpButton.addEventListener('click', () => {
+            container.classList.add('right-panel-active');
+        });
+
+        signInButton.addEventListener('click', () => {
+            container.classList.remove('right-panel-active');
+        });
+
+        document.getElementById("registrationForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+
+            fetch("/register", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const registrationMessage = document.getElementById("registrationMessage");
+
+                    if (data.success) {
+                        registrationMessage.innerText = data.message;
+                        registrationMessage.className = "success";
+                        setTimeout(function () {
+                            window.location.href = '/login/'
+                        }, 3000);
+                    } else {
+                        registrationMessage.innerText = "Registration failed: " + data.message;
+                        registrationMessage.className = "error";
+                    }
+                    registrationMessage.style.display = "block";
+                })
+                .catch(error => {
+                    console.error("There was an error with the fetch operation:", error);
+                });
+        });
+    </script>
+</body>
+
+</html>

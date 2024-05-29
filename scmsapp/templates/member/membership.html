@@ -1,0 +1,402 @@
+{% extends '/member/base.html' %}
+{% block title %}Countryside Community Swimming Club - Membership{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+<h3 class="m-3 p-3">Manage Membership</h3>
+<div class="container">
+    <h1>Membership</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Member Name</th>
+                <th scope="col">Membership Type</th>
+                <th scope="col">Membership status</th>
+                <th scope="col">Membership Expired Date </th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if member %}
+            <tr>
+                <td>{{ member['title'] }}. {{ member['first_name'] }} {{ member['last_name'] }}</td>
+                <td>{{ member['membership_type'] }}</td>
+                <td>
+                    <span
+                        class="badge {% if member['is_subscription'] == 1 %} bg-success{% else %} bg-danger{% endif %}">
+                        {% if member['is_subscription'] == 1 %}
+                        Active
+                        {% else %}
+                        Expired
+                        {% endif %}
+                    </span>
+                </td>
+
+                <td>{{ member['expired_date'] }}
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <a type="button" class="btn btn-primary editButton" data-bs-toggle="modal"
+                            data-bs-target="#subscribeModal" data-toggle="tooltip" data-placement="top"
+                            title="Subscription">
+                            <i class="fas fa-store"></i></a>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <h1>Payment History</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Product</th>
+                <th scope="col">Booking</th>
+                <th scope="col">Payment Amount($)</th>
+                <th scope="col">Payment Date</th>
+                <th scope="col">Payment Status</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if payments %}
+            {% for payment in payments %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ products[payment['product_id']]['product_name'] }}</td>
+                <td>
+                    {{ '' if payment['booking_id'] is none else payment['booking_id'] }}
+                </td>
+                <td>{{ "{:.2f}".format(payment['total']) }}
+                </td>
+                <td>{{ payment['pay_time'] }}</td>
+                <td>
+                    {% if payment['is_paid'] == 1 %}
+                    <span class="badge bg-success">Success</span>
+                    {% else %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if payment['is_paid'] != 1 %}
+                    <div class="btn-group">
+                        <a type="button" class="btn btn-danger pay-btn" data-bs-toggle="modal"
+                            data-bs-target="#paymentModal" data-toggle="tooltip" data-placement="top" title="Pay"
+                            href="#" data-bs-payid="{{ payment['id'] }}"
+                            data-bs-productid="{{ payment['product_id'] }}">
+                            <i class="far fa-credit-card"></i></a>
+
+                        <a type="button" class="btn btn-danger del-btn" data-bs-toggle="modal"
+                            data-bs-target="#cancelModal" data-bs-payid="{{ payment['id'] }}" data-toggle="tooltip"
+                            data-placement="top" title="Cancel" href="#"><i class="fas fa-times-circle"></i></a>
+                    </div>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="7" class="text-center">There is no data to be showed.</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="subscribeModal" aria-labelledby="dynamicModalLabel"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <form method="post" id="subscriptionForm" class="needs-validation" novalidate
+            action="{{ url_for('subscribe') }}">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title">Membership Subscription</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Choose a membership type:</p>
+                    {% if products %}
+                    {% for key, value in products.items() %}
+                    {% if loop.index <= 2 %} <div class="form-check">
+                        <input class="form-check-input" type="radio" name="product" id="product{{ key }}"
+                            value="{{ key }}" required onchange="setPrice(this)">
+                        <input type="hidden" id="price{{ key }}" value="{{ value['price'] }}">
+                        <label class="form-check-label" for="product{{ key }}">
+                            {{ value['product_name'] }} - ${{ "{:.2f}".format(value['price'])}}{% if 'Month' in
+                            value['product_name'] %} + 30 Days{% else %} + 365 Days{% endif %}
+                        </label>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                <div id="membershipTypeFeedback" class="invalid-feedback">Please select a membership type.</div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="price" id="price">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-success">Subscribe</button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+
+
+
+<div class="modal" tabindex="-1" role="dialog" id="cancelModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="cancelForm" method="post" action="{{ url_for('membershipcancel') }}">
+                <input type="hidden" id="delpaymentId" name="delpaymentId">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title">Cancel Subscription</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    Are you sure you want to Cancel Subscription?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                    <button type="submit" class="btn btn-danger" id="confirmCancelBtn">Yes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="paymentModal" aria-labelledby="dynamicModalLabel" aria-hidden="true"
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="paymentForm" method="post" class="needs-validation" novalidate action="{{ url_for('payment') }}">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title">Payment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="paymentId" name="paymentId">
+                    <input type="hidden" id="productId" name="productId">
+                    <div class="mb-3">
+                        <label for="paymentMethod" class="form-label">Payment Method</label>
+                        <select class="form-select" id="paymentMethod" required>
+                            <option selected disabled value="">Select Payment Method</option>
+                            <option value="credit">Credit Card</option>
+                            <option value="paypal">PayPal</option>
+                            <option value="bank">Bank Transfer</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a payment method.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cardNumber" class="form-label">Card Number</label>
+                        <input type="text" class="form-control" id="cardNumber" placeholder="Enter card number"
+                            required>
+                        <div class="invalid-feedback">Please enter a valid card number.</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="expiryDate" class="form-label">Expiry Date</label>
+                            <input type="text" class="form-control" id="expiryDate" placeholder="MM/YYYY" required>
+                            <div class="invalid-feedback">Please enter a valid expiry date.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cvv" class="form-label">CVV</label>
+                            <input type="text" class="form-control" id="cvv" placeholder="CVV" required>
+                            <div class="invalid-feedback">Please enter a valid CVV.</div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        onclick="refleshpage()">Cancel</button>
+                    <button type="submit" class="btn btn-danger" id="confirmPaymentBtn">Submit Payment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+    document.getElementById('subscriptionForm').addEventListener('submit', function (event) {
+        // Prevent the default form submission
+        event.preventDefault();
+        // Get the form data
+        var formData = new FormData(this);
+        // Check if a membership type is selected
+        var selectedMembershipType = document.querySelector('input[name="product"]:checked');
+        if (!selectedMembershipType) {
+            // If no membership type is selected, show the feedback message
+            document.getElementById('membershipTypeFeedback').style.display = 'block';
+            return; // Stop form submission
+        }
+        document.getElementById('membershipTypeFeedback').style.display = 'none';
+
+        // Submit the form data
+        fetch('/subscribe', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+
+                    // Set the payment id
+                    document.getElementById('paymentId').value = data.payment_id;
+                    document.getElementById('productId').value = data.product_id;
+                    // Open the payment modal
+                    $('#subscribeModal').modal('hide');
+                    $('#paymentModal').modal('show');
+                } else {
+                    console.error('Error:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+    });
+
+
+    document.getElementById('paymentForm').addEventListener('submit', function (event) {
+        // Prevent the default form submission
+        event.preventDefault();
+        // Get the form data
+        var formData = new FormData(this);
+
+        // // Check if all required fields have values
+        // var isValid = true;
+        // // Array to hold IDs of required fields that are empty
+        // var emptyFields = [];
+
+        // // Define an object to map field IDs to their corresponding labels
+        // var fieldLabels = {
+        //     'paymentMethod': 'Payment Method',
+        //     'cardNumber': 'Card Number',
+        //     'expiryDate': 'Expiry Date',
+        //     'cvv': 'CVV'
+        // };
+
+        // // Iterate over each required field
+        // for (var fieldId of Object.keys(fieldLabels)) {
+        //     var fieldValue = formData.get(fieldId);
+        //     // If a required field is empty, mark it as invalid
+        //     if (!fieldValue) {
+        //         isValid = false;
+        //         emptyFields.push(fieldLabels[fieldId]);
+        //     }
+        // }
+        if (validateForm()) {
+            fetch('/payment', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Open the payment modal
+                        $('#paymentModal').modal('hide');
+                        window.location.href = '/membership';
+                    } else {
+                        console.error('Error:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+
+                });
+        }
+
+    });
+
+    function setPrice(radio) {
+        if (radio.checked) {
+            var productId = radio.value;
+            var productPrice = document.getElementById('price' + productId).value
+        };
+        document.getElementById('price').value = productPrice;
+        document.getElementById('membershipTypeFeedback').style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const payButtons = document.querySelectorAll('.pay-btn');
+        const delButtons = document.querySelectorAll('.del-btn');
+
+        payButtons.forEach(function (button) {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                const paymentId = button.getAttribute('data-bs-payid');
+                const productId = button.getAttribute('data-bs-productid');
+
+                document.getElementById('paymentId').value = paymentId;
+                document.getElementById('productId').value = productId;
+
+                $('#paymentModal').modal('show');
+            });
+        });
+        delButtons.forEach(function (button) {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                const paymentId = button.getAttribute('data-bs-payid');
+                document.getElementById('delpaymentId').value = paymentId;
+
+                // $('#cancelModal').modal('show');
+            });
+        });
+    });
+
+    function validateForm() {
+        var isValid = true;
+
+        // Validate payment method
+        var paymentMethod = document.getElementById('paymentMethod').value;
+        if (paymentMethod === "") {
+            isValid = false;
+            document.getElementById('paymentMethod').classList.add('is-invalid');
+        } else {
+            document.getElementById('paymentMethod').classList.remove('is-invalid');
+        }
+
+        // Validate card number
+        var cardNumber = document.getElementById('cardNumber').value;
+        if (cardNumber === "") {
+            isValid = false;
+            document.getElementById('cardNumber').classList.add('is-invalid');
+        } else {
+            document.getElementById('cardNumber').classList.remove('is-invalid');
+        }
+
+        // Validate expiry date
+        var expiryDate = document.getElementById('expiryDate').value;
+        if (expiryDate === "") {
+            isValid = false;
+            document.getElementById('expiryDate').classList.add('is-invalid');
+        } else {
+            document.getElementById('expiryDate').classList.remove('is-invalid');
+        }
+
+        // Validate CVV
+        var cvv = document.getElementById('cvv').value;
+        if (cvv === "") {
+            isValid = false;
+            document.getElementById('cvv').classList.add('is-invalid');
+        } else {
+            document.getElementById('cvv').classList.remove('is-invalid');
+        }
+
+        return isValid;
+    }
+
+    function refleshpage() {
+        window.location.reload(); // Reload the current page
+    }
+</script>
+{% endblock %}

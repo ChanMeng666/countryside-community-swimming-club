@@ -1,0 +1,108 @@
+{% extends '/member/base.html' %}
+
+{% block content %}
+<section style="margin-top: 20px;">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-5 col-md-6 col-sm-12">
+        <section>
+          <div class="container ">
+              <img src="{{ url_for('static', filename='images/dashboard/1500x600-swimmer.jpg') }}" class="d-block w-100 model"
+              alt="...">
+          </div>
+        </section>
+        <div class="model model-bgcolor">
+          <h4 class="p-3 model-text">Instructor</h4>
+          <div class="list-group px-3 pb-2">
+            {% for data in instructorList %}
+            <a href="/instructor-profile/{{data.id}}" class="list-group-item list-group-item-action model-bgcolor"
+              style="border-left: 0 !important; border-right: 0 !important; border-top-left-radius: 0; border-top-right-radius: 0;"
+              aria-current="true">
+              <div class="d-flex justify-content-between">
+                <div class="d-flex">
+                  <div style="max-width:60px;">
+                    {% set default_image = url_for('static', filename='images/profile_images/default.jpg') %}
+                    {% if data.image %}
+                    <img src="{{ url_for('static', filename='images/profile_images/' + data.user_id|string + '/' +data.image) }}"
+                      class="d-block w-100" alt="..." style="max-height: 100%; max-width: 100%; height: auto;" onerror="this.src='{{default_image}}'">
+                      {% else %}
+                      <img src="{{ url_for('static', filename='images/profile_images/default.jpg') }}" class="d-block w-100" alt="..."
+                        style="max-height: 100%; max-width: 100%; height: auto;">
+                      {% endif %}
+                  </div>
+                  <div class="m-1">
+                    <div style="font-size: small;">
+                      {{data.position}}
+                    </div>
+                    <div style="font-size: larger; font-weight: 700;">
+                      {{data.title}} {{data.last_name}} {{data.first_name}}
+                    </div>
+                  </div>
+                  </div>
+                  <div class="my-auto">
+                    <i class="fas fa-angle-right"></i>
+                  </div>
+                  </div>
+                  </a>
+                  {% endfor %}
+                  </div>
+                  </div>
+                  </div>
+        <div class="col-lg-7 col-md-6 col-sm-12 model model-bgcolor">
+          <h4 class="p-3 model-text">Upcoming Bookings</h4>
+          {% if bookingList %}
+          <div class="list-group" style="border-top: 1px solid rgb(222, 226, 230);">
+            <table id="example" class="table table-striped" style="width:100%">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Class Name</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Instructor</th>
+                  <th scope="col">When will Start</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for booking in bookingList %}
+                <tr>
+                  <th>
+                    {{loop.index}}
+                  </th>
+                  <td>{{booking.class_name}}</td>
+                  <td>{{booking.class_type}}</td>
+                  <td>{{booking.last_name}} {{booking.first_name}}</td>
+                  <td>{{booking.start_time}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div style="font-size: larger;">
+            You have no Booking Yet
+          </div>
+          {% endif %}
+        </div>
+        
+        </section>
+        
+        
+      </div>
+  </div>
+</section>
+<style>
+  .model {
+    border-radius: 20px;
+    background-color: rgb(107, 148, 187);
+    margin: 20px 0px;
+  }
+
+  .model-text {
+    font-weight: 500;
+  }
+
+  .model-bgcolor{
+    background-color: rgb(214, 243, 250);
+  }
+</style>
+{% endblock %}

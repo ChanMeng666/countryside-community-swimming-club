@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Countryside Community Swimming Club  - All Pool and Lanes{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+<h3 class="m-3 p-3">All Pool and lanes</h3>
+<p1><br></p1>
+<div><br></div>
+<div ><br></div>
+
+<!-- code to display pool or lane status-->
+<!-- pool and lanes passed in as list of dictionaries -->
+<div class="container">
+    <!-- Table to show all pool and lanes -->
+    <table id="pool_table" class="table table-hover">
+        <thead>
+            <tr>
+                <th>Pool/lane</th>
+                <th>Lane Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pool in pool_name %}
+                <!-- Show pool or lane status -->
+                <tr>
+                    <td>{{ pool.pool_name }}</td>
+                    <td>{{ pool.lane_name }}</td>
+                    <td>
+                        {% if pool.status == 1 %}
+                        Active
+                        {% elif pool.status == 0 %}
+                        Inactive
+                        {% endif %}
+                    </td>
+                    <td>
+                        <!-- Edit pool and lane status -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary"  data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ pool.id }}">Edit Status</button>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Popup Modal -->
+                <div class="modal fade" id="staticBackdrop{{ pool.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <form action="/setting/pool/{{pool.id}}" method="POST">
+                            <div class="modal-content">
+                                <div class="modal-header bg-dark text-light">
+                                    <h5 class="modal-title" id ="staticBackdropLabel">Manage Pool or Lane status:</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Enter Pool or Lane status:</p>
+                                    <select class="form-select" id="edit_modal_status" name="edit_modal_status" required>
+                                        <option value="1"> Active</option>
+                                        <option value="0"> Inactive</option>
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Save Change</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+{% endblock %}

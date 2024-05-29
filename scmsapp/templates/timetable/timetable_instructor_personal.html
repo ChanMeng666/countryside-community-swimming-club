@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/timetable.css') }}"/>
+{% endblock %}
+
+{% block title %}
+    Personal Timetable
+{% endblock %}
+
+{% block content %}
+<div class="row my-4">
+    <div class="col">
+        <a href="{{ url_for('timetable_instructor') }}" class="btn key-btn">👈 Back to Master Schedule</a>
+    </div>
+    <div class="col">
+        {#========== Jump to Week ==========#}
+        <div class="container">
+            <form action="/timetable_instructor/myschedule" method="POST">
+                <div class="input-group mb-2">
+                    <input type="date" id="date" name="date" value="{{ selected_week }}" required>
+                    <input type="submit" value="Show timetable">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{#========== Weekly Timetable ==========#}
+<div class="table-responsive-xxl">
+    <h6 style="color: #575757;"> * Hold down <kbd>Shift</kbd> and use <strong>Mouse Wheel</strong> <span style="font-family: 'Segoe UI Symbol', 'Arial Unicode MS', 'Symbola';">&#128433;</span> to scroll the table left and right. </h6>
+    <table id="week_timetable_table">
+        <thead>
+            <tr>
+                <th>Time / Day</th>
+                {% for date in week_dates %}
+                <th class="text-nowrap {% if date.strftime('%Y-%m-%d') == selected_date.strftime('%Y-%m-%d') %}highlight{% endif %}">
+                    <span class="week-day">{{ date.strftime('%A') }}</span><br>
+                    <span class="date">{{ date.strftime('%Y-%m-%d') }}</span>
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for hour in range(6, 21) %}
+            <tr>
+                <td class="text-nowrap">{{ hour }}:00</td>
+                {% for date in week_dates %}
+                <td class="text-nowrap {% if date.date() == selected_date.date() %}highlight{% endif %}">
+                    {% for class in classes %}
+                        {% if class.start_time.date() == date.date() and class.start_time.hour == hour %}
+
+                            {#========== Class Details Modal ==========#}
+                            <div class="class-button-container">
+                                <button type="button" class="class-button" data-class-type="{{ class.class_type }}" style="margin-top: 10px;"  data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ class.id }}">
+                                    {{ class.class_name }}<br>
+                                    {{ class.start_time.strftime('%H:%M') }} -- {{ class.end_time.strftime('%H:%M') }}<br>
+                                </button>
+                            </div>
+
+                            <div class="modal fade" id="staticBackdrop{{ class.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                              <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                  <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            {% if class.class_type == 1 %}
+                                                <img src="https://weinsteinjcc.org/wp-content/uploads/2021/11/Aqua_Zumba-1600x1062.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                            {% elif class.class_type == 2 %}
+                                                <img src="https://www.peaksportsclub.com/wp-content/uploads/2019/12/18-09-04_WhatIsAquaZumba-Jumbo.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                            {% elif class.class_type == 3 %}
+                                                <img src="https://aquamobileswim.com/wp-content/uploads/2013/10/instructor-and-class-on-workout-in-swimming-pool-P8JNZES.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                            {% elif class.class_type == 4 %}
+                                                <img src="https://scarletribbonmerino.com/cdn/shop/articles/Swimming_image_2048x.jpg?v=1466165387" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                            {% elif class.class_type == 5 %}
+                                                <img src="https://www.westboroughcc.com/Amenities_(1)/Pool/Junior_Swim_Dive/Junior_Swim_Dive_Photo_Gallery/swim_500x500" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                            {% elif class.class_type == 6 %}
+                                                <img src="https://images.squarespace-cdn.com/content/v1/5fae4615d1200b5ef8907ca6/1605953596567-CWEGXUZZCDYYJHN3RHR1/butterfly01.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                            {% elif class.class_type == 7 %}
+                                                <img src="https://swimjim.com/wp-content/uploads/2018/09/beginner-swimming-exercises-1.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                            {% elif class.class_type == 8 %}
+                                                <img src="https://taoliswimmingclub.com/wp-content/uploads/2022/07/7A9A5462-scaled.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                            {% elif class.class_type == 9 %}
+                                                <img src="https://blog.arenaswim.com/wp-content/uploads/2022/02/group-of-swimmers-swimming.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">
+                                                    Instructor
+                                                </span>
+                                                <select class="form-select" id="modal_instructor" name="modal_instructor" disabled>
+                                                    {% for instructor in instructors %}
+                                                        <option value="{{ instructor.id }}" {% if instructor.id == class.instructor_id %}selected{% endif %}>
+                                                            {{ instructor.title }} {{ instructor.first_name }} {{ instructor.last_name }} -- {{ instructor.position }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">
+                                                    Location
+                                                </span>
+                                                <select class="form-select" id="modal_location" name="modal_location" disabled>
+                                                    {% for location in locations %}
+                                                        <option value="{{ location.id }}" {% if location.id == class.location_id %}selected{% endif %}>
+                                                            {{ location.pool_name }} -- {{ location.lane_name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">
+                                                    Class Type
+                                                </span>
+                                                <select class="form-select" id="modal_class_type" name="modal_class_type" disabled>
+                                                    {% for class_type in class_types %}
+                                                        <option value="{{ class_type.id }}" {% if class_type.id == class.class_type %}selected{% endif %}>
+                                                            {{ class_type.class_type }} -- {{ class_type.class_name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">
+                                                    Open Slot
+                                                </span>
+                                                <input type="number" class="form-control" id="modal_open_slot" name="modal_open_slot" value="{{ class.open_slot }}" readonly>
+                                            </div>
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">
+                                                    Start Time
+                                                </span>
+                                                <input type="datetime-local" class="form-control" id="modal_start_time" name="modal_start_time" value="{{ class.formatted_start_time }}" readonly>
+                                            </div>
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">
+                                                    End Time
+                                                </span>
+                                                <input type="datetime-local" class="form-control" id="modal_end_time" name="modal_end_time" value="{{ class.formatted_end_time }}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn key-btn edit-btn" data-bs-toggle="modal" data-bs-target="#editClassModal{{ class.id }}" data-class-type-id="{{ class.class_type }}">Edit</button>
+                                    <button type="button" class="btn key-btn  delete-btn" data-bs-toggle="modal" data-bs-target="#deleteClassModal{{ class.id }}" data-class-type-id="{{ class.class_type }}">Delete</button>
+                                    <button type="button" class="btn cancel-btn" data-bs-dismiss="modal">Close</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Edit Class Modal -->
+                            <div class="modal fade" id="editClassModal{{ class.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editClassModalLabel" aria-hidden="true">
+                              <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="editClassModalLabel">Edit Class</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <form action="{{ url_for('edit_class_instructor', class_id=class.id) }}" method="POST">
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                {% if class.class_type == 1 %}
+                                                    <img src="https://weinsteinjcc.org/wp-content/uploads/2021/11/Aqua_Zumba-1600x1062.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                                {% elif class.class_type == 2 %}
+                                                    <img src="https://www.peaksportsclub.com/wp-content/uploads/2019/12/18-09-04_WhatIsAquaZumba-Jumbo.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                                {% elif class.class_type == 3 %}
+                                                    <img src="https://aquamobileswim.com/wp-content/uploads/2013/10/instructor-and-class-on-workout-in-swimming-pool-P8JNZES.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                                {% elif class.class_type == 4 %}
+                                                    <img src="https://scarletribbonmerino.com/cdn/shop/articles/Swimming_image_2048x.jpg?v=1466165387" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                                {% elif class.class_type == 5 %}
+                                                    <img src="https://www.westboroughcc.com/Amenities_(1)/Pool/Junior_Swim_Dive/Junior_Swim_Dive_Photo_Gallery/swim_500x500" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                                {% elif class.class_type == 6 %}
+                                                    <img src="https://images.squarespace-cdn.com/content/v1/5fae4615d1200b5ef8907ca6/1605953596567-CWEGXUZZCDYYJHN3RHR1/butterfly01.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                                {% elif class.class_type == 7 %}
+                                                    <img src="https://swimjim.com/wp-content/uploads/2018/09/beginner-swimming-exercises-1.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                                {% elif class.class_type == 8 %}
+                                                    <img src="https://taoliswimmingclub.com/wp-content/uploads/2022/07/7A9A5462-scaled.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                                {% elif class.class_type == 9 %}
+                                                    <img src="https://blog.arenaswim.com/wp-content/uploads/2022/02/group-of-swimmers-swimming.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="hidden" name="class_id" value="{{ class.id }}">
+                                                <div class="input-group mb-2">
+                                                    <span class="input-group-text">
+                                                        Instructor
+                                                    </span>
+                                                    <select class="form-select" id="edit_modal_instructor{{ class.id }}" name="edit_modal_instructor" disabled>
+                                                        {% for instructor in instructors %}
+                                                            <option value="{{ instructor.id }}" {% if instructor.id == class.instructor_id %}selected{% endif %}>
+                                                                {{ instructor.title }} {{ instructor.first_name }} {{ instructor.last_name }} -- {{ instructor.position }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <input type="hidden" id="hidden_instructor_id" value="{{ class.instructor_id }}">
+                                                </div>
+                                                <div class="input-group mb-2">
+                                                    <span class="input-group-text">
+                                                        Location
+                                                    </span>
+                                                    <select class="form-select" id="edit_modal_location{{ class.id }}" name="edit_modal_location" required>
+                                                        {% for location in locations %}
+                                                            <option value="{{ location.id }}" {% if location.id == class.location_id %}selected{% endif %} {% if location.pool_name == 'Deep Pool' %}disabled{% endif %}>
+                                                                {{ location.pool_name }} -- {{ location.lane_name }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="input-group mb-2">
+                                                    <span class="input-group-text">
+                                                        Class Type
+                                                    </span>
+                                                    <select class="form-select" id="edit_modal_class_type{{ class.id }}" name="edit_modal_class_type" required>
+                                                        {% for class_type in class_types %}
+                                                            <option value="{{ class_type.id }}" data-class-type="{{ class_type.class_type }}" {% if class_type.id == class.class_type %}selected{% endif %}  {% if class_type.class_type == 'class' %}disabled{% endif %}>
+                                                                {{ class_type.class_type }} -- {{ class_type.class_name }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="input-group mb-2">
+                                                    <span class="input-group-text">
+                                                        Open Slot
+                                                    </span>
+                                                    <input type="number" class="form-control" id="edit_modal_open_slot{{ class.id }}" name="edit_modal_open_slot" value="{{ class.open_slot }}" min="0" max="" required>
+                                                </div>
+                                                <div class="input-group mb-2">
+                                                    <span class="input-group-text">
+                                                        Start Time
+                                                    </span>
+                                                    <input type="datetime-local" class="form-control" id="edit_modal_start_time{{ class.id }}" name="edit_modal_start_time" value="{{ class.formatted_start_time }}" required step="1800" onchange="adjustTime(this)">
+                                                </div>
+                                                <div class="input-group mb-2">
+                                                    <span class="input-group-text">
+                                                        End Time
+                                                    </span>
+                                                    <input type="datetime-local" class="form-control" id="edit_modal_end_time{{ class.id }}" name="edit_modal_end_time" value="{{ class.formatted_end_time }}" required readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="submit" class="btn confirm-btn">Save Changes</button>
+                                      <button type="button" class="btn cancel-btn" data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Delete Class Modal -->
+                            <div class="modal fade" id="deleteClassModal{{ class.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteClassModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteClassModalLabel">Confirm Deletion</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    Are you sure you want to delete this class?
+                                  </div>
+                                  <form action="{{ url_for('delete_class_instructor', class_id=class.id) }}" method="POST">
+                                    <div class="modal-footer">
+                                      <button type="submit" class="btn confirm-btn">Delete</button>
+                                      <button type="button" class="btn cancel-btn" data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{{ url_for('static', filename='js/timetable.js') }}"></script>
+<script src="{{ url_for('static', filename='js/timetable_disable_button.js') }}"></script>
+<script src="{{ url_for('static', filename='js/timetable_set_end_time.js') }}"></script>
+{% endblock %}

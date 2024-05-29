@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Countryside Community Swimming Club - Class report{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container m-3 p-3">
+    <h2 class="m-3">Class report</h2>
+    <p class="m-3">A list of aqua aerobics classes by popularity.</p>
+    <form id="date_range_form" action="" method="get">
+        <div class="row m-3">
+            
+            <div class="col-md-2">
+                <label class="form-label">Date from</label>
+                <input class="form-control" type="date" id="date_from" name="date_from" value="{{date_from}}" required>
+            </div>
+            
+            <div class="col-md-2">
+                <label class="form-label">Date to</label>
+                <input class="form-control" type="date" id="date_to" name="date_to" value="{{date_to}}" required>
+            </div>
+            <div class="col-md-1 d-grid gap-2">
+                <button class="btn btn-primary align-self-end" type="submit">Display</button>
+            </div>
+        </div>
+    </form>
+    <div class="table-responsive w-50 m-4">
+        <table class="table table-hover table-striped-columns">
+            <thead>
+                <tr>
+                    <th class="col-auto">Aqua aerobics class</th>
+                    <th class="col-auto text-end">Total bookings</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for class in report %}
+                    {% if class.class_name == 'Total'  %}
+                        <tr>
+                            <td class="col-auto"><strong>{{ class.class_name }}</strong></td>
+                            <td class="col-auto text-end"><strong>{{ class.total_bookings }}</strong></td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td class="col-auto">{{ class.class_name }}</td>
+                            <td class="col-auto text-end">{{ class.total_bookings }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+<script src="{{url_for('static', filename='/js/report-date.js')}}"></script> 
+{% endblock %}

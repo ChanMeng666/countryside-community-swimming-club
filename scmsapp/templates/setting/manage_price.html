@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Countryside Community Swimming Club  - All instructors{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+<h3 class="m-3 p-3">Manage class Price</h3>
+<p1><br></p1>
+<div><br></div>
+<div ><br></div>
+
+<!-- code to display product price-->
+<!-- products passed in as list of dictionaries -->
+<div class="container">
+    <div class="row">
+    </div>
+    <!-- Table to show all products and price -->
+    <table id="product_table" class="table table-hover">
+        <thead>
+            <tr>
+                <th>Lesson Name</th>
+                <th>current price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in product %}
+                <tr>
+                    <td><a href="/setting/manage-product-price/{{p.id}}"  data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ p.id }}" >{{ p.product_name }}</a></td>
+                    <td>{{ p.price }}</td>
+                </tr>
+
+                <!-- Popup Modal -->
+                <div class="modal fade" id="staticBackdrop{{ p.id }}" role="dialog"  tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <form action="/setting/manage-product-price/{{p.id}}" method="POST">
+                            <div class="modal-content">
+                                <div class="modal-header bg-dark text-light">
+                                    <h5 class="modal-title" id ="staticBackdropLabel">Change Price:</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Enter new product price:</p>
+                                    <input type="text" id = "new_price" name = "new_price" class="form-control" value =" {{ p.price }}">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Save Change</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+</script>
+{% endblock %}

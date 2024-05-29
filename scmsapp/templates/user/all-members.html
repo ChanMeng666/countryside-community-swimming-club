@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block title %}Countryside Community Swimming Club - All members{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+
+<h3 class="m-3 p-3">Manage members</h3>
+
+<!-- code to display member profile-->
+<!-- members passed in as list of dictionaries -->
+<div class="container m-3 p-3">
+    <!-- Top bar for filter, search and add new -->
+    <div class="row mb-3">
+        <label class="col-md-2" for="membershipFilter">Filter Membership:</label>
+        <div class="col-md-2">
+            <select class="form-select" id="membershipFilter" onchange="filterMembership()">
+                <option value="all">All Membership</option>
+                <option value="expired">Expired Membership</option>
+                <option value="expiring_7_days">Expired in 7 Days</option>
+            </select>
+        </div>
+        <!-- Button link to add new user -->
+        <div class="col-4"></div>
+        <div class="col">
+            <a class="btn btn-primary mb-3" href="{{url_for('new_member')}}">Add new</a>
+        </div>
+    </div>
+    <div class="row m-3">
+        <!-- Checkbox to toggle displaying inactive members -->
+        <div class="col-4 form-check">
+            <input class="form-check-input" type="checkbox" id="showInactive">
+            <label class="form-check-label" for="showInactive">Show inactive</label>
+        </div>
+    </div>
+    <!-- Table to show all members -->
+    <table id="member_table" class="table table-hover">
+        <thead>
+            <tr>
+                <th>Member name</th>
+                <th>Position</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>Membership Type</th>
+                <th>Membership Expired Date</th>
+                <th>Membership Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in members %}
+            <!-- Inactive members do not display by default -->
+            <tr {% if not member.is_active %}class="inactive" style="display: none" {% endif %}
+                data-expiration-date="{{ member.expired_date }}">
+                <td><a href="{{ url_for('member_profile', member_id=member.id) }}">{{member.first_name}}
+                        {{member.last_name}}</a></td>
+                <td>{{ member.position }}</td>
+                <td>{{ member.email }}</td>
+                <td>{{ member.phone }}</td>
+                <td>{{ member.address }}</td>
+                <td>{{ member.membership_type }}</td>
+                <td>{{ member.expired_date }}</td>
+                <td>
+                    <span
+                        class="badge {% if member['is_subscription'] == 1 %} bg-success{% else %} bg-danger{% endif %}">
+                        {% if member['is_subscription'] == 1 %}
+                        Active
+                        {% else %}
+                        Expired
+                        {% endif %}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+        $('#showInactive').change(function () {
+            var showInactive = $(this).is(':checked');
+            if (showInactive) {
+                $('#member_table tr.inactive').show(); // Show inactive members
+            } else {
+                $('#member_table tr.inactive').hide(); // Hide inactive members
+            }
+        });
+
+
+        $('#member_table tbody tr').each(function () {
+            var expirationDate = new Date($(this).data('expiration-date'));
+            var currentDate = new Date();
+            var daysDifference = Math.ceil((expirationDate - currentDate) / (1000 * 60 * 60 * 24));
+
+
+            if (daysDifference <= 7) {
+                $(this).addClass('table-warning');
+            }
+
+            if (daysDifference <= 0) {
+                $(this).addClass('table-danger');
+            }
+        });
+    });
+
+
+    function filterMembership() {
+        var filter = document.getElementById("membershipFilter").value;
+        var table = document.getElementById("member_table");
+        var rows = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < rows.length; i++) { 
+            var row = rows[i];
+            var expiredDateCell = row.cells[6]; 
+
+            if (filter === "expired") {
+                if (isExpired(expiredDateCell.textContent.trim())) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            } else if (filter === "expiring_7_days") {
+                if (isExpiringIn7Days(expiredDateCell.textContent.trim())) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            } else { // Show all the membershhip
+                row.style.display = "";
+            }
+        }
+    }
+
+    function isExpired(expiredDate) {
+        var expirationDate = new Date(expiredDate);
+        var currentDate = new Date();
+
+        return expirationDate < currentDate;
+    }
+
+    function isExpiringIn7Days(expiredDate) {
+        var expirationDate = new Date(expiredDate);
+        var currentDate = new Date();
+        var sevenDaysFromNow = new Date();
+        sevenDaysFromNow.setDate(currentDate.getDate() + 7);
+
+        return expirationDate <= sevenDaysFromNow && expirationDate > currentDate;
+    }
+</script>
+{% endblock %}

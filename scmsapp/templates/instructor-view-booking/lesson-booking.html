@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Countryside Community Swimming Club  - Lesson bookings{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+
+<h3 class="m-3 p-3">Upcoming lesson bookings</h3>
+
+<div class="container m-3 p-3">
+    <div class="row mb-3">      
+        <div class="col">
+            <a class="btn btn-primary" href="{{url_for('view_all_lesson_bookings')}}">View all bookings</a>
+        </div>
+    </div>
+    <div class="container p-3 m-3">
+        <table id="table_lesson_booking" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Lesson name</th>
+                    <th>Date</th>
+                    <th>Start time</th>
+                    <th>End time</th>
+                    <th>Location</th>
+                    <th>Member</th>
+                    <th>Booking status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td>{{booking.class_name}}</td>
+                    <td>{{booking.start_time.strftime('%Y-%m-%d')}}</td>
+                    <td>{{booking.start_time.strftime('%H:%M')}}</td>
+                    <td>{{booking.end_time.strftime('%H:%M')}}</td>
+                    <td>{{booking.location}}</td>
+                    <td><a href="#" class="show_member_modal" data-bs-toggle="modal"  data-member-id="{{booking.member_id}}">{{booking.member_name}}</a></td>
+                    <td>
+                        <span class="badge {% if booking.status == 1 %} bg-success{% else %}bg-danger{% endif %}">
+                            {% if booking.status == 1 %}Active{% else %}Cancelled{% endif %}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Member modal -->
+        <div class="modal fade" id="member_modal" tabindex="-1" role="dialog" aria-labelledby="member_modal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="member_modal_label">Member Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="member_profile">
+                        <!-- Member profile injected by ajax -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(function(){
+        $(".show_member_modal").click(function(){
+            // Extract member id from data-member-id attribute
+            var member_id = $(this).data('member-id'); 
+            // Send member id to Flask route
+            $.ajax({
+                url: '/lesson-booking/member/' + member_id,
+                type: 'GET',
+                success: function(member) {
+                    // Update modal content with member profile
+                    $('#member_profile').html(member);
+                    $('#member_modal').modal('show');
+                },
+                error: function() {
+                    alert('Something went wrong retrieving member profile.');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

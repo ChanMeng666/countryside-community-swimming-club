@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Swimming Club{% endblock %}</title>
+  <!-- Bootstrap CSS link -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/base.css')}}">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.css">
+  {% block css %}
+  {% endblock %}
+</head>
+
+<body style="padding: 0px !important;">
+  <!-- navbar -->
+  <nav class="navbar">
+    <div class="logo_item" style="color: #b9272c !important; font-weight: 700;">
+      <i class="bx bx-menu" id="sidebarOpen"></i>
+      Welcome Back, {{user.first_name if user else profile.first_name if profile else 'valued member' }}!
+    </div>
+
+    <div>
+      <a href="{{url_for('dashboard')}}" class="member-navlink m-2">
+        <span>
+          <i class="fas fa-home"></i>
+        </span>
+        <span class="navlink">Dashboard</span>
+      </a>
+      <a href="{{url_for('member_instructors')}}" class="member-navlink m-2">
+        <span>
+          <i class="fas fa-swimmer"></i>
+        </span>
+        <span class="navlink">Instructors</span>
+      </a>
+      <a href="../timetable_member" class="member-navlink m-2">
+        <span>
+          <i class="fas fa-clipboard-list"></i>
+        </span>
+        <span class="navlink">Timetable</span>
+      </a>
+      <a href="{{url_for('member_booking')}}" class="member-navlink m-2">
+        <span>
+          <i class="fas fa-user"></i>
+        </span>
+        <span class="navlink">Booking</span>
+      </a>
+      <a href="{{url_for('membership')}}" class="member-navlink m-2">
+        <span>
+          <i class="fas fa-calendar"></i>
+        </span>
+        <span class="navlink">Membership</span>
+      </a>
+      <a href="{{url_for('news_list')}}" class="member-navlink m-2">
+        <span>
+          <i class="far fa-envelope"></i>
+        </span>
+        <span class="navlink">News</span>
+      </a>
+    </div>
+
+
+
+    <div class="navbar_content">
+      <!-- <i class="bi bi-grid"></i> -->
+      <!-- <i id="popupTrigger" class="fas fa-bell" style="position: relative;"></i> -->
+      <div id="popup" class="popup">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul>
+          {% for category, message in messages %}
+          <li class="alert alert-{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+      </div>
+
+      <a href="{{url_for('profile')}}"><i class="fas fa-user-circle profile"></i></a>
+      <!-- <img src="images/profile.jpg" alt="" class="profile" /> -->
+      <a href="{{ url_for('logout') }}"> <i class='fas fa-sign-out-alt'></i> </a>
+    </div>
+  </nav>
+
+
+
+  {% block content %}
+  {% endblock %}
+
+
+  <!-- <script src="{{url_for('static', filename='/js/base.js')}}"></script> -->
+  <!-- Bootstrap's JavaScript bundle including Popper -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+  <script>
+
+    new DataTable('#example', {
+      searching: false,
+      lengthChange: false
+    });
+    new DataTable('#example2');
+
+
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+      'use strict'
+
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      const forms = document.querySelectorAll('.needs-validation')
+
+      // Loop over them and prevent submission
+      Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+
+          form.classList.add('was-validated')
+        }, false)
+      })
+    })()
+
+    // Automatically close the alert after 5 seconds
+    setTimeout(function () {
+      var alerts = document.querySelectorAll('.alert');
+      alerts.forEach(function (alert) {
+        if (alert) {
+          alert.remove();
+        }
+      });
+    }, 4000);
+
+
+    // var trigger = document.getElementById('popupTrigger');
+    // var popup = document.getElementById('popup');
+    // window.addEventListener('load', function () {
+    //   if (popup.innerHTML.trim().length > 0) {
+    //     trigger.style.color = '#f00';
+    //   }
+    // });
+
+    // trigger.addEventListener('click', function () {
+    //   if (popup.innerHTML.trim().length > 0) {
+    //     popup.classList.toggle('visible');
+    //   }
+
+    // });
+
+    // window.addEventListener('click', function (event) {
+    //   if (!trigger.contains(event.target) && !popup.contains(event.target)) {
+    //     popup.classList.remove('visible');
+    //   }
+    // });
+
+  </script>
+  {% block js %}
+  {% endblock %}
+</body>
+
+</html>

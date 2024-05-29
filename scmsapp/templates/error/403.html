@@ -1,0 +1,13 @@
+{% extends "error/error-base.html" %}
+
+{% block content %}
+<div class="container">
+    <img src="{{url_for('static', filename='images/error/403.png')}}"  alt="Error Image" class="error-image img-fluid">
+    <h3 class="text-center mb-4">Oops!</h3>
+    <p class="text-center">Looks like you were trying to access something you shouldn't have.</p>
+    <p class="text-center">
+        <button onclick="goBack()" class="btn btn-secondary">Go back</button>
+        <a href="{{url_for('home')}}"  class="btn btn-primary">Home page</a>
+    </p>
+</div>
+{% endblock %}

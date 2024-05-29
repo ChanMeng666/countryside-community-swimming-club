@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Countryside Community Swimming Club  - New class type{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+
+<h3 class="m-3 p-3">Add a new class type</h3>
+
+<!-- form to add new class type-->
+
+<div class="container m-3 p-3">
+    <form id='user_profile_form'enctype="multipart/form-data" action="" method="POST">
+        <div class="row mb-3">
+            <label for="class_type" class="col-md-2 form-label">Class tpye</label>
+            <div class="col-md-2">
+                <select name="class_type" class="form-select" required>
+                    <option value="class">Aqua class</option>
+                    <option value="1-on-1">1-on-1 lesson</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="class_name" class="col-md-2 form-label">Class name</label>
+            <div class="col-md-2">
+                <input type="text" class="form-control" name="class_name" id="class_name" placeholder="Class name" required>
+            </div>
+        </div>
+        
+            <div class="row mb-3">
+                <label for="description" class="col-md-2 form-label">Description</label>
+                <div class="col-md-4">
+                    <textarea rows="5" class="form-control editable" name="description" id="description" placeholder="Description" required></textarea>
+                </div>
+            </div>
+       
+        <div class="row mb-3">
+            <div class="col-md-2"></div>
+            <div class="col-md-2">
+                <button type="submit" id="submitBtn" class="btn btn-primary btn-block" >Submit</button>
+                <button type="reset" id="cancelBtn" class="btn btn-light btn-block" onclick="history.back()">Cancel</button>
+            </div>
+        </div> 
+    </form>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,93 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    /*background-color: #fff;*/
+    margin: 0;
+    color: var(--text-color);
+    /*background: linear-gradient(90deg, rgba(9,97,121,1) 0%, rgba(34,182,195,1) 55%, rgba(0,179,255,1) 100%);*/
+    background:linear-gradient( 95.2deg, rgba(173,252,234,1) 26.8%, rgba(192,229,246,1) 64% );
+
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+@media (max-width: 600px) {
+    th, td {
+        white-space: normal; /* Allows text to wrap */
+        font-size: smaller; /* Adjusts the font size for small screens */
+    }
+}
+th {
+    background-color: #007994;
+    color: #fff;
+    font-weight: 500;
+}
+.highlight {
+    background-color: rgba(229, 110, 70, 0.08);
+    color: #333;
+}
+form {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.container {
+    max-width: 1200px;
+    margin: auto;
+    overflow: auto;
+    padding: 0 20px;
+}
+.week-day {
+    font-weight: bold;
+    display: block; /* Ensures it takes up the full width, effectively putting the date on a new line */
+    margin-bottom: 5px; /* Adds some space between the week day and the date */
+}
+
+.date {
+    display: block; /* This ensures that the date is on a new line */
+    font-size: 0.9em; /* Optionally, make the date slightly smaller */
+    color: #333; /* Optionally, make the date color subtler than the day */
+}
+
+
+#offcanvasScrolling {
+    /* Set the offcanvas height to 40% of the screen height */
+    height: 40vh;
+    /* Setting the minimum height */
+    min-height: 300px;
+}
+
+  /* CSS for button */
+  .key-btn {
+    border-radius: 20px;
+    background-color: #007994;
+    color: #fff;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: 500;
+  }
+
+  .key-btn:hover {
+    border: 1px solid #4070f4;
+    background-color: #fff;
+    color: #4070f4;
+  }
+  .cancel-btn {
+    border-radius: 20px;
+    background-color: #707070;
+    color: #fff;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: 500;
+  }
+
+  .cancel-btn:hover {
+    border: 1px solid #707070;
+    background-color: #fff;
+    color: #707070;
+  }

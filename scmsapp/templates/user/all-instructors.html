@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Countryside Community Swimming Club  - Manage instructors{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+<h3 class="m-3 p-3">Manage instructors</h3>
+
+<!-- code to display instructor profile-->
+<!-- instructors passed in as list of dictionaries -->
+<div class="container m-3 p-3">
+    <!-- Top bar for filter, search and add new -->
+    <div class="row m-3">
+        <!-- Checkbox to toggle displaying inactive instructors -->
+        <div class="col-4 form-check">
+            <input class="form-check-input" type="checkbox" id="showInactive">
+            <label class="form-check-label" for="showInactive">Show inactive</label>
+        </div>
+        <!-- Button link to add new user -->
+        <div class="col-4"></div>
+        <div class="col">
+            <a class="btn btn-primary mb-3" href="{{url_for('new_instructor')}}">Add new</a>
+        </div>
+    </div>
+    <!-- Table to show all instructors -->
+    <table id="instructor_table" class="table table-hover">
+        <thead>
+            <tr>
+                <th>Instructor name</th>
+                <th>Position</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for instructor in instructors %}
+             <!-- Inactive instructors do not display by default -->
+            <tr {% if not instructor.is_active %}class="inactive" style="display: none"{% endif %}>
+                <td><a href="{{ url_for('instructor_profile', instructor_id=instructor.id) }}">{{instructor.first_name}} {{instructor.last_name}}</a></td>
+                <td>{{ instructor.position }}</td>
+                <td>{{ instructor.email }}</td>
+                <td>{{ instructor.phone }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        $('#showInactive').change(function() {
+            var showInactive = $(this).is(':checked');
+            if (showInactive) {
+                $('#instructor_table tr.inactive').show(); // Show inactive instructors
+            } else {
+                $('#instructor_table tr.inactive').hide(); // Hide inactive instructors
+            }
+        });
+    });
+</script>
+{% endblock %}

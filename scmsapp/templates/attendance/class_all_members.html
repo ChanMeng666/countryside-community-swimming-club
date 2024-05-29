@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <div class="row">
+        <table id="table_lesson_booking" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        <strong>Name</strong> 
+                    </th>
+                    <th>
+                        <strong>Phone</strong>
+                    </th>
+                    <th>
+                        <strong>Address</strong>
+                    </th>
+                    <th>
+                        <strong>Attendance</strong>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                    {% for member in memberList %}
+                    <tr>
+                        <td>{{member.title }} {{member.first_name }} {{member.last_name}}</td>
+                        <td>{{member.phone }}</td>
+                        <td>{{member.address }}</td>
+                        <td>
+                            <input type="radio" name="{{ member.id }}" value="1" {% if member.is_attended == 1 %} checked {% endif %} >
+                            <label for="attended_yes">Yes</label>
+                            <input type="radio" name="{{ member.id }}" value="0" {% if member.is_attended != 1 %} checked {% endif %} >
+                            <label for="attended_no">No</label>
+                        </td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>

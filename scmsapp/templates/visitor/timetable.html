@@ -1,0 +1,199 @@
+{% extends "index.html" %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home_timetable.css') }}"/>
+    <style>
+
+#visitor_timetable{
+    margin: 20px;
+}
+.course-image img {
+    border-radius: 10px; /* Rounded corners for the image */
+    max-width: 250px; /* Maximum image width */
+    max-height: 600px;
+}
+    </style>
+{% endblock %}
+{% block content %}
+<p><br></p>
+<div><br></div>
+    <body >
+    <div class = 'timetable-image-container'>
+        <div class="row my-4">
+            <div>
+                <div class="row">
+                    <h1 style="clear: both; height: 100%; text-align: center">Timetable</h1>
+                </div>
+                <div class="row" >
+                    {#========== Jump to Week ==========#}
+                        <div class="container" style="display: flex; justify-content: flex-end">
+                            <form action="/home/timetable" method="POST">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">
+                                        Select a date
+                                    </span>
+                                    <input type="date" id="date" name="date" value="{{ selected_date }}" required>
+                                    <input type="submit" value="Show timetable">
+                                </div>
+                            </form>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+        {#========== Weekly Timetable ==========#}
+        <div class="table-responsive-xxl" id = "visitor_timetable">
+            <table id="week_timetable_table">
+                <thead>
+                    <tr>
+                        <th>Time / Day</th>
+                        {% for date in week_dates %}
+                        <th class="text-nowrap {% if date.strftime('%Y-%m-%d') == selected_date.strftime('%Y-%m-%d') %}highlight{% endif %}">
+                            <span class="week-day">{{ date.strftime('%A') }}</span> <br>
+                            <span class="date">{{ date.strftime('%Y-%m-%d') }}</span>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hour in range(6, 21) %}
+                    <tr>
+                        <td class="text-nowrap">{{ hour }}:00</td>
+                        {% for date in week_dates %}
+                        <td class="text-nowrap {% if date.date() == selected_date.date() %}highlight{% endif %}">
+                            {% for class in classes %}
+                                {% if class.start_time.date() == date.date() and class.start_time.hour == hour %}
+
+                                    {#========== Class Details Modal ==========#}
+                                    <div class="class-button-container" style="margin-top: 10px;">
+                                        <button type="button" class="visitor-class-button" data-class-type="{{ class.class_type }}" style="margin-top: 10px;"  data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ class.id }}">
+                                            {{ class.class_name }}<br>
+                                            {{ class.start_time.strftime('%H:%M') }} -- {{ class.end_time.strftime('%H:%M') }}<br>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal fade" id="staticBackdrop{{ class.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-4 course-image">
+                                                            {% if class.class_type == 1 %}
+                                                                <img src="https://weinsteinjcc.org/wp-content/uploads/2021/11/Aqua_Zumba-1600x1062.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                                            {% elif class.class_type == 2 %}
+                                                                <img src="https://www.peaksportsclub.com/wp-content/uploads/2019/12/18-09-04_WhatIsAquaZumba-Jumbo.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                                            {% elif class.class_type == 3 %}
+                                                                <img src="https://aquamobileswim.com/wp-content/uploads/2013/10/instructor-and-class-on-workout-in-swimming-pool-P8JNZES.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                                            {% elif class.class_type == 4 %}
+                                                                <img src="https://scarletribbonmerino.com/cdn/shop/articles/Swimming_image_2048x.jpg?v=1466165387" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <div class="input-group mb-2">
+                                                                <span class="input-group-text" >
+                                                                    Instructor
+                                                                </span>
+                                                                <select class="form-select" id="modal_instructor" name="modal_instructor" disabled>
+                                                                    {% for instructor in instructors %}
+                                                                        <option value="{{ instructor.id }}">
+                                                                            {{ instructor.title }} {{ instructor.first_name }} {{ instructor.last_name }} -- {{ instructor.position }}
+                                                                         </option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            <div class="input-group mb-2">
+                                                                <span class="input-group-text">
+                                                                    Location
+                                                                </span>
+                                                                <select class="form-select" id="modal_location" name="modal_location" disabled>
+                                                                    {% for location in locations %}
+                                                                        <option value="{{ location.id }}">
+                                                                            {{ location.pool_name }} -- {{ location.lane_name }}
+                                                                        </option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            <div class="input-group mb-2">
+                                                                <span class="input-group-text">
+                                                                    Class Type
+                                                                </span>
+                                                                <select class="form-select" id="modal_class_type" name="modal_class_type" disabled>
+                                                                    {% for class_type in class_types %}
+                                                                        <option value="{{ class_type.id }}">
+                                                                            {{ class_type.class_type }} -- {{ class_type.class_name }}
+                                                                        </option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            <div class="input-group mb-2">
+                                                                <span class="input-group-text">
+                                                                    Open Slot
+                                                                </span>
+                                                                <input type="number" class="form-control" id="modal_open_slot" name="modal_open_slot" value="{{ class.open_slot }}" readonly>
+                                                            </div>
+                                                            <div class="input-group mb-2">
+                                                                <span class="input-group-text">
+                                                                    Start Time
+                                                                </span>
+                                                                <input type="datetime-local" class="form-control" id="modal_start_time" name="modal_start_time" value="{{ class.formatted_start_time }}" readonly>
+                                                            </div>
+                                                            <div class="input-group mb-2">
+                                                                <span class="input-group-text">
+                                                                    End Time
+                                                                </span>
+                                                                <input type="datetime-local" class="form-control" id="modal_end_time" name="modal_end_time" value="{{ class.formatted_end_time }}" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn cancel-btn" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+{% endblock %}
+
+{% block js %}
+  <!-- Bootstrap's JavaScript bundle including Popper -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+
+<script>
+    <!-- Timetable Class Button -- Colour display style -->
+function getButtonClass(classType) {
+  switch(classType) {
+    case 1:
+      return "btn btn-primary";
+    case 2:
+      return "btn btn-success";
+    case 3:
+      return "btn btn-danger";
+    case 4:
+      return "btn btn-warning";
+    default:
+      return "btn btn-outline-dark";
+  }
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var buttons = document.querySelectorAll('.visitor-class-button');
+  buttons.forEach(function(button) {
+    var classType = parseInt(button.dataset.classType);
+    button.className = getButtonClass(classType);
+  });
+});
+
+</script>
+{% endblock %}

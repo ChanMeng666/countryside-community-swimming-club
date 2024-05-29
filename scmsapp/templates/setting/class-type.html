@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Countryside Community Swimming Club  - Class types{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+
+<h3 class="m-3 p-3">Manage class tpyes</h3>
+
+
+<div class="container m-3 p-3">
+    <!-- Top bar for filter, search and add new -->
+    <div class="row mb-3">      
+        <!-- Button link to add new user -->
+        
+        <div class="col">
+            <a class="btn btn-primary mb-3" href="{{url_for('new_class_type')}}">Add new</a>
+        </div>
+    </div>
+    <ul class="nav nav-tabs" id="class_type_tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="class-tab" data-bs-toggle="tab" data-bs-target="#class-tab-pane" type="button" role="tab" aria-controls="class-tab-pane" aria-selected="true">Aqua classes</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="lesson-tab" data-bs-toggle="tab" data-bs-target="#lesson-tab-pane" type="button" role="tab" aria-controls="lesson-tab-pane" aria-selected="false">1-on-1 lessons</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="class-tab-pane" role="tabpanel" aria-labelledby="class-tab" tabindex="0">
+            <!-- Table to show all aqua class types -->
+            <table id="class_table" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Class name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for class in classes %}
+                    <tr>
+                        <td><a href="{{ url_for('class_type_detail', id=class.id) }}">{{class.class_name}}</a></td>
+                        <td>{{ class.description }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="lesson-tab-pane" role="tabpanel" aria-labelledby="lesson-tab" tabindex="0">
+            <!-- Table to show all aqua class types -->
+            <table id="lesson_table" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Lesson name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lesson in lessons %}
+                    <tr>
+                        <td><a href="{{ url_for('class_type_detail', id=lesson.id) }}">{{lesson.class_name}}</a></td>
+                        <td>{{ lesson.description }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        $('#showInactive').change(function() {
+            var showInactive = $(this).is(':checked');
+            if (showInactive) {
+                $('#member_table tr.inactive').show(); // Show inactive members
+            } else {
+                $('#member_table tr.inactive').hide(); // Hide inactive members
+            }
+        });
+    });
+</script>
+{% endblock %}

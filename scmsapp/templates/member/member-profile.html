@@ -1,0 +1,146 @@
+{% extends '/member/base.html' %}
+{% block title %}Countryside Community Swimming Club  - User Profile{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+
+<section>
+    <div class="container">
+
+<h3 class="m-3 p-3">User profile</h3>
+<!-- code to display user profile-->
+<!-- profile passed in as dictionary -->
+<!-- role passed in -->
+<div class="container m-3 p-3">
+<form id='user_profile_form'enctype="multipart/form-data" action="#" method="POST">
+    <div class="row mb-3">
+        <label for="first_name" class="col-md-2 form-label">Title</label>
+        <div class="col-md-2">
+            <input type="text" readonly class="form-control form-control-plaintext editable" name="title" id="title" value="{{ profile.title }}">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="first_name" class="col-md-2 form-label">First name</label>
+        <div class="col-md-2">
+            <input type="text" readonly class="form-control form-control-plaintext editable" name="first_name" id="first_name" value="{{ profile.first_name }}">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="last_name" class="col-md-2 form-label">Last name</label>
+        <div class="col-md-2">
+            <input type="text" readonly class="form-control form-control-plaintext editable" name="last_name" id="last_name" value="{{ profile.last_name }}">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="position" class="col-md-2 form-label">Position</label>
+        <div class="col-md-2">
+            <input type="text" readonly class="form-control form-control-plaintext editable" name="position" id="position" value="{{ profile.position }}">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="email" class="col-md-2 form-label">Email</label>
+        <div class="col-md-2">
+            <input type="email" readonly class="form-control form-control-plaintext editable" name="email" id="email" value="{{ profile.email|d('', true) }}">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="email" class="col-md-2 form-label">Phone number</label>
+        <div class="col-md-2">
+            <input type="tel" readonly class="form-control form-control-plaintext editable" id="phone" name="phone" pattern="0\d{8,10}" title="Please enter a valid phone number starting with 0 and containing 9 to 11 digits" value="{{ profile.phone|d('', true) }}">
+        </div>
+    </div>
+        <div class="row mb-3">
+            <label for="address" class="col-md-2 form-label">Address</label>
+            <div class="col-md-2">
+                <input type="tel" readonly class="form-control form-control-plaintext editable" id="address" name="address" value="{{ profile.address|d('', true) }}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="email" class="col-md-2 form-label">Date of birth</label>
+            <div class="col-md-2">
+                <input type="date" readonly class="form-control form-control-plaintext editable" id="dob" name="dob" value="{{ profile.dob|d('', true) }}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="health_info" class="col-md-2 form-label">Health information</label>
+            <div class="col-md-2">
+                <textarea readonly class="form-control form-control-plaintext editable" name="health_info" id="health_info">{{profile.health_info|d('', true)}}</textarea>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="change_password" class="col-md-2 form-label">Password</label>
+            <div class="col-md-2">
+                <a href="{{url_for('change_password')}}"><input type="button" class="btn btn-light" id="change_password" value="Change password"></a>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-2"></div>
+            <div class="col-md-2">
+                <button type="button" id="editBtn" class="btn btn-light btn-block">Edit</button>
+                <button type="submit" id="submitBtn" class="btn btn-primary btn-block" style="display: none;">Submit</button>
+                <button type="reset" id="cancelBtn" class="btn btn-light btn-block" style="display: none;">Cancel</button>
+            </div>
+        </div>  
+</form>
+</div>
+        
+</div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        // Function to toggle readonly attribute of form fields
+        function toggleReadOnly(status) {
+            $('.editable').prop('readonly', status);
+            $('.selectable').prop('disabled', status);
+        }
+
+        // Function to toggle edit and submit buttons
+        function toggleButtons() {
+            $('#editBtn').toggle();
+            $('#submitBtn').toggle();
+            $('#cancelBtn').toggle();
+            $('.ondemand').toggle();
+        }
+
+        // Add event listener to the edit button
+        $('#editBtn').click(function() {
+            toggleReadOnly(false); // Make editable
+            toggleButtons(); // Show submit and cancel buttons, hide edit button
+            $('.editable').toggleClass("form-control-plaintext", false);
+            $('.editable').toggleClass("form-control", true);
+        });
+
+        // Add event listener to the cancel button
+        $('#cancelBtn').click(function() {
+            toggleReadOnly(true); // Make readonly
+            toggleButtons(); // Show edit button, hide submit button
+            $('.editable').toggleClass("form-control-plaintext", true);
+            $('.editable').toggleClass("form-control", false);
+        });
+        // Initially make form readonly and show edit button
+        toggleReadOnly(true);
+
+        // Validate file format
+        $('#user_profile_form').submit(function() {
+            var allowedFormats = ['jpg', 'jpeg', 'png', 'gif'];
+            var fileName = $('#upload_image').val().toLowerCase();
+            if (!fileName) {
+                return true;
+            }
+            var extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+            if ($.inArray(extension, allowedFormats) === -1) {
+                alert('Invalid file format. Please upload an image with one of the following formats: ' + allowedFormats.join(', '));
+                return false; // Prevent form submission
+            }
+            return true; // Allow form submission
+        });
+});
+
+
+</script>
+{% endblock %}

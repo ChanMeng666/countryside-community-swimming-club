@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/timetable.css') }}"/>
+{% endblock %}
+
+{% block title %}
+    Search Class
+{% endblock %}
+
+{% block content %}
+<div class="row my-4">
+    <div class="col-4">
+        {% if session['role'] == 'manager' %}
+            <a href="{{ url_for('timetable') }}" class="btn key-btn">👈 Back to Schedule</a>
+        {% elif session['role'] == 'instructor' %}
+            <a href="{{ url_for('timetable_instructor') }}" class="btn key-btn">👈 Back to Master Schedule</a>
+        {% endif %}
+    </div>
+    <div class="col-8">
+        <form method="POST" action="{{ url_for('search_class') }}">
+            <div class="input-group">
+              <select class="form-select" id="search_type" name="search_type" required>
+                <option value="" disabled selected>Please select a search type</option>
+                <option value="instructor_name" {% if request.form.search_type == 'instructor_name' %}selected{% endif %}>Instructor Name</option>
+{#                <option value="instructor_position" {% if request.form.search_type == 'instructor_position' %}selected{% endif %}>Instructor Position</option>#}
+{#                <option value="pool_name" {% if request.form.search_type == 'pool_name' %}selected{% endif %}>Pool Name</option>#}
+{#                <option value="lane_name" {% if request.form.search_type == 'lane_name' %}selected{% endif %}>Lane Name</option>#}
+                <option value="class_type" {% if request.form.search_type == 'class_type' %}selected{% endif %}>Class Type</option>
+                <option value="class_name" {% if request.form.search_type == 'class_name' %}selected{% endif %}>Class Name</option>
+              </select>
+                <input type="text" class="form-control" id="search_value" name="search_value" value="{{ request.form.search_value or '' }}" required>
+              <button id="search_class" class="btn key-btn" type="submit">
+                  Search Class
+              </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{#========== Search Results Table ==========#}
+<div class="table-responsive-xxl">
+    <table class="table table-striped table-hover table-bordered caption-top" id="search_results_table">
+        <caption> * Hold down <kbd>Shift</kbd> and use <strong>Mouse Wheel</strong> <span style="font-family: 'Segoe UI Symbol', 'Arial Unicode MS', 'Symbola';">&#128433;</span> to scroll the table left and right. </caption>
+      <thead class="table-dark">
+        <tr>
+          <th class="text-nowrap">Instructor Name</th>
+          <th class="text-nowrap">Instructor Position</th>
+          <th class="text-nowrap">Pool Name</th>
+          <th class="text-nowrap">Lane Name</th>
+          <th class="text-nowrap">Class Type</th>
+          <th class="text-nowrap">Class Name</th>
+          <th class="text-nowrap">Start Time</th>
+          <th class="text-nowrap">End Time</th>
+          <th class="text-nowrap">Open Slot</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider" id="search_results_table_body">
+        {% for class in results %}
+        <tr>
+            <td class="text-nowrap">{{ class.first_name ~ " " ~ class.last_name }}</td>
+            <td class="text-nowrap">{{ class.position }}</td>
+            <td class="text-nowrap">{{ class.pool_name }}</td>
+            <td class="text-nowrap">{{ class.lane_name }}</td>
+            <td class="text-nowrap">
+              {% if class.class_type in [1, 2, 3, 4] %}
+                class
+              {% elif class.class_type in [5, 6, 7, 8, 9] %}
+                1-on-1
+              {% else %}
+                Unknown
+              {% endif %}
+            </td>
+            <td class="text-nowrap">{{ class.class_name }}</td>
+            <td class="text-nowrap">{{ class.start_time }}</td>
+            <td class="text-nowrap">{{ class.end_time }}</td>
+            <td class="text-nowrap">{{ class.open_slot }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}Countryside Community Swimming Club  - Instructor Attendance{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+
+<h3 class="m-3 p-3">Upcoming lesson bookings</h3>
+
+<div class="container m-3 p-3">
+    <div class="container p-3 m-3">
+        <table id="table_lesson_booking" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Lesson name</th>
+                    <th>Instructor name</th>
+                    <th>Date</th>
+                    <th>Start time</th>
+                    <th>End time</th>
+                    <th>Booked number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookingList %}
+                <tr>
+                    <td>{{booking.class_name}}</td>
+                    <td>{{booking.first_name}} {{booking.last_name}}</td>
+                    <td>{{booking.start_time.strftime('%Y-%m-%d')}}</td>
+                    <td>{{booking.start_time.strftime('%H:%M')}}</td>
+                    <td>{{booking.end_time.strftime('%H:%M')}}</td>
+                    <td>{% if booking.class_type == "class" %}
+                        {{15 - booking.open_slot}}
+                        {% elif booking.open_slot == 0 %}
+                        1
+                        {% elif booking.open_slot == 1 %}
+                        0
+                        {% endif %}</td>
+                    <td>
+                        <a href="#" class=" btn btn-primary show_class_members_modal" data-bs-toggle="modal" data-class-id="{{booking.id}} ">
+                            Mark Attendance
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+
+        <!-- Attendance modal -->
+        <div class="modal fade" id="Attendance_modal" tabindex="-1" role="dialog" aria-labelledby="Attendance_modal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form id="attendanceForm"  class="needs-validation" novalidate action="/save_attendance" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="member_modal_label">Member Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="members_profile">
+                            <!-- Members profile injected by ajax -->
+                        </div>
+                        <input type="hidden" name="classID" id="classID" value="">
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success" id="updateAttendance">Update Attendance</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(function(){
+        $(".show_class_members_modal").click(function(){
+            // Extract member id from data-member-id attribute
+            var class_id = $(this).data('class-id'); 
+            // Send member id to Flask route
+            $.ajax({
+                url: '/attendance/class/' + class_id,
+                type: 'GET',
+                success: function(memberList) {
+                    $('#members_profile').html(memberList);
+                    $('#Attendance_modal').modal('show');
+                    $('#classID').val(class_id);
+                },
+                error: function() {
+                    alert('Something went wrong retrieving member profile.');
+                }
+            });
+        });
+
+        $("#attendanceForm").click(function(){
+            e.preventDefault(); // Prevent default form submission behavior
+            var formData = $(this).serialize();
+
+            var class_id = $('[name="memberID"]').val();
+            
+            formData.append('class_id', class_id);
+
+            $.ajax({
+            type: "POST",
+            url: '/save_attendance' , // Get the form's action attribute as the submission URL
+            data: formData,
+            success: function(response){
+                // Handle successful response
+                console.log(response);
+                // Check if submission was successful, modify condition according to your actual scenario
+                if (response.success) {
+                    // Refresh the current page
+                    location.reload();  
+                }
+            },
+            error: function(xhr, status, error){
+                // Handle error response
+                console.error(xhr.responseText);
+        }
+    });
+        });
+    });
+</script>
+{% endblock %}

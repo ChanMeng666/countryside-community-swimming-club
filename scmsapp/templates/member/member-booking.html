@@ -1,0 +1,150 @@
+{% extends '/member/base.html' %}
+
+{% block content %}
+
+<section>
+    <div class="container">
+        <h4 class="p-2"> View ALL Booking</h4>
+        {% if bookingList %}
+          <div class="mb-3">
+            <label for="classSelect" class="form-label">Filter by Class Name:</label>
+            <select class="form-select" id="classSelect">
+                <option value="">All Classes</option>
+                {% set class_names = [] %}
+                {% for booking in bookingList %}
+                    {% if booking.class_name not in class_names %}
+                        {% set _ = class_names.append(booking.class_name) %}
+                        <option value="{{ booking.class_name }}">{{ booking.class_name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+          </div>
+
+          <div class="list-group" style="border-top: 1px solid rgb(222, 226, 230);">
+            <table class="table table-striped" style="width:100%">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Class Name</th>
+                  <th scope="col">Booking</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Instructor</th>
+                  <th scope="col">When will Start</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="bookingTableBody">
+                {% for booking in bookingList %}
+                <tr class="classRow" data-class="{{ booking.class_name }}" data-booking-id="{{ booking.id }}">
+                  <th>
+                    {{loop.index}}
+                  </th>
+                  <td>{{booking.class_name}}</td>
+                  <td>{{booking.id}}</td>
+                  <td>{{booking.class_type}}</td>
+                  <td>{{booking.last_name}} {{booking.first_name}}</td>
+                  <td>{{booking.start_time}}</td>
+                  <td>
+                    {% if booking.is_attended == 0 %}
+                    <button type="button" class="btn btn-secondary cancelButton" data-bs-toggle="modal"
+                    data-bs-target="#cancelModal" data-toggle="tooltip" data-placement="top" data-book-id="{{ booking.id }}" data-class-name="{{ booking.class_name }}" data-class-id="{{ booking.class_id }}" data-start-time="{{ booking.start_time }}">Cancel</button>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div style="font-size: larger;">
+            You have no Booking Yet
+          </div>
+        {% endif %}
+
+                  
+    </div>
+</section>
+
+<div class="modal" tabindex="-1" role="dialog" id="cancelModal" aria-labelledby="dynamicModalLabel"
+    aria-hidden="true" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <form id="cancelForm" action="/member/cancelBooking" method="post">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title">Cancel a Class</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure want to Cancel this class?</p>
+                    <p id="className" class="px-2"></p>
+                    <p id="startTime" class="px-2"></p>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="bookID" id="bookID" value="">
+                    <input type="hidden" name="classID" id="classID" value="">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Confirmed</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+  // Bind change event to select dropdown
+  $('#classSelect').change(function() {
+      var selectedClass = $(this).val();
+      filterBooking(selectedClass);
+  });
+
+  // Filter booking list
+  function filterBooking(className) {
+      if (!className) {
+          $('.classRow').show(); // Show all rows if no class is selected
+      } else {
+          $('.classRow').hide(); // Hide all rows
+          $('[data-class="' + className + '"]').show(); // Show rows for selected class
+      }
+  }
+
+  $('.cancelButton').click(function() {
+        var classNameValue = $(this).data('class-name');
+        var startTimeValue = $(this).data('start-time');
+
+        $('#className').text('Class Name: ' + classNameValue);
+        $('#startTime').text('Start Time: ' + startTimeValue);
+
+        var bookIDValue = $(this).data('book-id'); 
+        var classIDValue = $(this).data('class-id'); 
+        $('#bookID').val(bookIDValue); 
+        $('#classID').val(classIDValue); 
+
+    });
+
+    $('#cancelForm').submit(function(e){
+    e.preventDefault(); // Prevent default form submission behavior
+    var formData = $(this).serialize(); // Serialize form data
+
+    $.ajax({
+        type: "POST",
+        url: $(this).attr('action'), // Get the form's action attribute as the submission URL
+        data: formData,
+        success: function(response){
+            // Handle successful response
+            console.log(response);
+            // Check if submission was successful, modify condition according to your actual scenario
+            if (response.success) {
+                // Refresh the current page
+                location.reload();
+            }
+        },
+        error: function(xhr, status, error){
+            // Handle error response
+            console.error(xhr.responseText);
+        }
+    });
+    });
+</script>
+{% endblock %}

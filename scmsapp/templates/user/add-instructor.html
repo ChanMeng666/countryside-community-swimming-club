@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Countryside Community Swimming Club  - User Profile{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+
+<h3 class="m-3 p-3">Add a new instructor</h3>
+
+<!-- form to add new member-->
+<!-- user passed in as dictionary -->
+<div class="container m-3 p-3">
+    <form id='user_profile_form'enctype="multipart/form-data" action="#" method="POST">
+        <div class="row mb-3">
+            <label for="username" class="col-md-2 form-label">Username</label>
+            <div class="col-md-2">
+                <input type="text" placeholder="Username" class="form-control" id="username" name="username" required value="{{user.username|d('', true)}}">
+            </div>       
+        </div>
+        <div class="row mb-3">
+            <label for="password" class="col-md-2 form-label">Password</label>
+            <div class="col-md-3">
+                <input type="password" placeholder="Password" class="form-control" id="password" name="password" required>
+            </div>       
+        </div>
+        <div class="row mb-3">
+            <label for="password" class="col-md-2 form-label"> Confirm Password</label>
+            <div class="col-md-3">
+                <input type="password" placeholder="Confirm password" class="form-control" id="confirm_password" name="confirm_password" required>
+            </div>       
+        </div>
+        <div class="row mb-3">
+            <label for="title" class="col-md-2 form-label">Title</label>
+            {% set title_list = ['Mr', 'Mrs', 'Ms', 'Miss', 'Master', 'Dr', 'Prof', 'Sir', 'Lady', 'Lord']%}
+            <div class="col-md-2">
+                <select class="form-select selectable" name="title" required>
+                    <option selected disabled>Select a title</option>
+                    {% for title in title_list %}
+                        <option value="{{title}}" {% if user.title == title %}selected{% endif %}>{{title}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="first_name" class="col-md-2 form-label">First name</label>
+            <div class="col-md-2">
+                <input type="text" class="form-control  editable" name="first_name" id="first_name" placeholder="First name" value="{{ user.first_name|d('', true) }}" required>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="last_name" class="col-md-2 form-label">Last name</label>
+            <div class="col-md-2">
+                <input type="text" class="form-control  editable" name="last_name" id="last_name" placeholder="Last name" value="{{ user.last_name|d('', true) }}" required>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="position" class="col-md-2 form-label">Position</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control  editable" name="position" id="position" placeholder="Position" value="{{ user.position|d('', true) }}" required>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="email" class="col-md-2 form-label">Email</label>
+            <div class="col-md-3">
+                <input type="email" class="form-control  editable" name="email" id="email" placeholder="Email" value="{{ user.email|d('', true) }}" required>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="phone" class="col-md-2 form-label">Phone number</label>
+            <div class="col-md-2">
+                <input type="tel" class="form-control  editable" id="phone" name="phone" placeholder="Phone number" pattern="0\d{8,10}" title="Please enter a valid phone number starting with 0 and containing 9 to 11 digits" value="{{ user.phone|d('', true) }}" required>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="profile" class="col-md-2 form-label">Instructor profile</label>
+            <div class="col-md-4">
+                <textarea class="form-control editable" rows="4" name="instructor_profile" id="instructor_profile" placeholder="Instructor profile">{{ user.instructor_profile|d('', true) }}</textarea>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6 {% if msg %}alert alert-danger{% endif %}" role="alert">{{msg}}</div>
+        </div>  
+        <div class="row mb-3">
+            <div class="col-md-2"></div>
+            <div class="col-md-2">
+                <button type="submit" id="submitBtn" class="btn btn-primary btn-block" >Submit</button>
+                <button type="reset" id="cancelBtn" class="btn btn-light btn-block" >Reset</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}

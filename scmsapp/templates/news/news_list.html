@@ -1,0 +1,226 @@
+{% if session['role'] == 'member' %}
+{% extends '/member/base.html' %}
+{% else %}
+{% extends 'base.html' %}
+{% endif %}
+
+{% block title %}Countryside Community Swimming Club - News{% endblock %}
+{% block css %}
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<style>
+    #newsEditor {
+        height: 400px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">News</h1>
+    {% if session['role'] == 'manager'%}
+    <button type="button" class="btn btn-primary" onclick="initdata()" data-bs-toggle="modal"
+        data-bs-target="#newsEditorModal">
+        Add News
+    </button>
+    {% endif %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Tittle</th>
+                <th>Date</th>
+                {% if session['role'] == 'manager'%}
+                <th colspan="4">Actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+
+            {% if news %}
+
+            {% for item in news %}
+            <tr>
+                <td><a href="{{ url_for('news_detail', news_id = item.id) }}">{{ item.title }}</a> </td>
+                <td>{{ item.date }}</td>
+                {% if session['role'] == 'manager'%}
+                <td>
+                    <div class="rowidContent" style="display: none;">
+                        {{ item.id }}
+                    </div>
+                    <div class="rowtitleContent" style="display: none;">
+                        {{ item.title }}
+                    </div>
+                    <div class="rowContent" style="display: none;">
+                        {{ item.content }}
+                    </div>
+                    <div class="btn-group">
+                        <a type="button" class="btn btn-primary editButton" data-bs-toggle="modal"
+                            data-bs-target="#newsEditorModal"
+                            onclick="setdata(this)"
+                            data-toggle="tooltip" data-placement="top" title="Edit"><i class="far fa-edit"></i></a>
+
+
+                        <a type="button" class="btn btn-danger deleteButton" data-bs-id="{{ item.id }}"
+                            data-bs-toggle="modal" data-bs-target="#newsDeleteModal" data-toggle="tooltip"
+                            data-placement="top" title="delete" href="#"><i class="fas fa-times-circle"></i></a>
+                    </div>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center">There is no data to be showed.</td>
+            </tr>
+            {% endif %}
+
+        </tbody>
+    </table>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="newsEditorModal" aria-labelledby="newsEditorModalLabel"
+    aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form id="newsEditorForm" method="post" class="needs-validation" novalidate
+                action="{{ url_for('news_manage') }}">
+                <div class="modal-header bg-dark text-light">
+                    <h5 class="modal-title">News Detail</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="newsID" name="news_id">
+                    <div class="mb-3">
+                        <span class="required">*</span>
+                        <label for="newsTittle" class="form-label">Tittle:</label>
+                        <input type="text" class="form-control" id="newsTittle" name="newsTittle"
+                            placeholder="Enter Tittle" required>
+                        <div class="invalid-feedback">
+                            Please enter a valid Tittle!
+                        </div>
+                    </div>
+                    <label class="form-label">Content:</label>
+                    <div id="newsEditor" class="mb-4"></div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" id="saveNewsBtn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal" tabindex="-1" role="dialog" id="newsDeleteModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-light">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete selected news?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+<script>
+
+    var quill = new Quill('#newsEditor', {
+        theme: 'snow'
+    });
+
+
+
+    document.getElementById('newsEditorForm').addEventListener('submit', function (event) {
+        // Prevent the default form submission
+        event.preventDefault();
+        // Validate form fields
+        var title = document.getElementById('newsTittle').value;
+        var content = quill.root.innerHTML;
+
+        if (!title) {
+            return;
+        }
+
+        var formData = new FormData(this);
+        var content = quill.root.innerHTML;
+        formData.append('content', content);
+        fetch('/news_manage', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    $('#newsEditorModal').modal('hide');
+                    window.location.href = '/news/list';
+
+                } else {
+                    console.error('Error:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+
+            });
+    });
+
+    document.querySelectorAll('.deleteButton').forEach(function (button) {
+        button.addEventListener('click', function () {
+            document.querySelectorAll('.deleteButton').forEach(function (btn) {
+                btn.classList.remove('active');
+            });
+            this.classList.add('active');
+        });
+    });
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+        var activeButton = document.querySelector('.deleteButton.active');
+        if (activeButton) {
+            var itemId = activeButton.getAttribute('data-bs-id');
+            $.ajax({
+                url: '/news/delete',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ news_id: itemId }),
+                success: function (data) {
+                    $('#newsDeleteModal').modal('hide');
+                    window.location.href = '/news/list';
+                },
+                error: function (xhr, status, error) {
+                }
+            });
+        }
+    });
+
+    function setdata(button) {
+        initdata();
+     
+        var parentElement = button.parentElement.parentElement;
+
+        var newsid = parentElement.querySelector('.rowidContent').textContent.trim();
+        var title = parentElement.querySelector('.rowtitleContent').textContent.trim();
+        var content = parentElement.querySelector('.rowContent').textContent.trim();
+
+        document.getElementById('newsID').value = newsid;
+        document.getElementById('newsTittle').value = title;
+        quill.root.innerHTML = content;
+    
+    }
+    function initdata() {
+        document.getElementById('newsID').value = '';
+        document.getElementById('newsTittle').value = '';
+        quill.root.innerHTML = '';
+    }
+
+</script>
+{% endblock %}

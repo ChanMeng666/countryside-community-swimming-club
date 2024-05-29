@@ -1,0 +1,74 @@
+{% extends "index.html" %}
+
+{% block css %}
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home_timetable.css') }}"/>
+<style>
+
+.course-block {
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #f0f0f0; /* Default background color */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: background-color 0.3s;
+}
+
+.course-block:hover {
+    background-color: #e8e8e8; /* Change background on hover */
+}
+
+.course-info {
+    flex: 1; /* Take up the remaining space not used by the image */
+}
+
+.course-image img {
+    border-radius: 10px; /* Rounded corners for the image */
+    max-width: 400px; /* Maximum image width */
+    max-height: 400px;
+    margin-left: 20px; /* Spacing between text and image */
+}
+    </style>
+{% endblock %}
+
+{% block title %}
+    <h1>Our Lessons</h1>
+{% endblock %}
+{% block content %}
+<p><br></p>
+<div><br></div>
+<div ><br></div>
+<h1 class="text-center">Our Lessons</h1>
+<body>
+    <div class="container mt-5">
+    {% for desc in  description %}
+    <div class="row">
+        <div class="col col-lg-12 course-block d-flex align-items-center">
+        <div class="course-info">
+            <h1>{{desc.class_name}}</h1>
+            <p1><br></p1>
+            <div><br></div>
+            <h3>Course Description :</h3>
+            <p>{{desc.description}}</p>
+            <div ><br></div>
+            <div ><br></div>
+            <h3>Instructors : </h3>
+            <a href="/instructor_profile/{{desc.id }}">{{desc.first_name}} {{desc.last_name}}</a>
+        </div>
+        <div class="course-image">
+            {% if desc.class_type == 1 %}
+                <img src="https://weinsteinjcc.org/wp-content/uploads/2021/11/Aqua_Zumba-1600x1062.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+            {% elif desc.class_type == 2 %}
+                <img src="https://www.peaksportsclub.com/wp-content/uploads/2019/12/18-09-04_WhatIsAquaZumba-Jumbo.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+            {% elif desc.class_type == 3 %}
+                <img src="https://aquamobileswim.com/wp-content/uploads/2013/10/instructor-and-class-on-workout-in-swimming-pool-P8JNZES.jpg" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+            {% elif desc.class_type == 4 %}
+                <img src="https://scarletribbonmerino.com/cdn/shop/articles/Swimming_image_2048x.jpg?v=1466165387" class="img-fluid rounded" style="height: 100%; object-fit: cover;" alt="">
+           {% endif %}
+        </div>
+        </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+{% endblock %}

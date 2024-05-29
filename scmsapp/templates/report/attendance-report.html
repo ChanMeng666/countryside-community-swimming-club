@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Countryside Community Swimming Club - Attendance report{% endblock %}
+{% block css %}
+<style></style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container m-3 p-3">
+    <h2 class="m-3">Attendance report</h2>
+    <p class="m-3">A summary of member and overall attendance.</p>
+    <form action="" method="get">
+        <div class="row m-3">
+            
+            <div class="col-md-2">
+                <label class="form-label">Class type</label>
+                <select class="form-select" id="class_type" name="class_type" required>
+                    <option value="all">All</option>
+                    <option value="class">Aqua aerobics class</option>
+                    <option value="1-on-1">1-on1 lesson</option>
+                </select>
+            </div>
+            
+            <div class="col-md-2">
+                <label class="form-label">Date from</label>
+                <input class="form-control" type="date" id="date_from" name="date_from" value="{{date_from}}" required>
+            </div>
+            
+            <div class="col-md-2">
+                <label class="form-label">Date to</label>
+                <input class="form-control" type="date" id="date_to" name="date_to" value="{{date_to}}" required>
+            </div>
+            <div class="col-md-1 d-grid gap-2">
+                <button class="btn btn-primary align-self-end" type="submit">Display</button>
+            </div>
+        </div>
+    </form>
+    <div class="table-responsive w-75 m-4">
+        <table class="table table-hover table-striped-columns">
+            <thead>
+                <tr>
+                    <th class="col-md-2">Member name</th>
+                    <th class="col-md-2 text-end">Total attended</th>
+                    <th class="col-md-2 text-end">No-shows</th>
+                    <th class="col-md-2 text-end">Total bookings</th>
+                    <th class="col-md-2 text-end">Attendance %</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in report %}
+                    {% if member.member_name == 'Overall'  %}
+                        <tr>
+                            <td class="col-md-2"><strong>{{ member.member_name }}</strong></td>
+                            <td class="col-md-2 text-end"><strong>{{ member.total_attended }}</strong></td>
+                            <td class="col-md-2 text-end"><strong>{{ member.total_not_attended }}</strong></td>
+                            <td class="col-md-2 text-end"><strong>{{ member.total_bookings }}</strong></td>
+                            <td class="col-md-2 text-end"><strong>{{ member.attendance_percentage }}%</strong></td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td class="col-md-2">{{ member.member_name }}</td>
+                            <td class="col-md-2 text-end">{{ member.total_attended }}</td>
+                            <td class="col-md-2 text-end">{{ member.total_not_attended }}</td>
+                            <td class="col-md-2 text-end">{{ member.total_bookings }}</td>
+                            <td class="col-md-2 text-end">{{ member.attendance_percentage }}%</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+<script src="{{url_for('static', filename='/js/report-date.js')}}"></script> 
+<script>
+    $(document).ready(function() {
+        // Keep the selected option after form submission
+        var selectedOption = "{{ class_type|safe }}";
+        $('#class_type').val(selectedOption);
+    });
+</script>
+{% endblock %}
