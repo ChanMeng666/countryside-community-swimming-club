@@ -1,73 +1,84 @@
-# Swimming Club Management System
-* Update 277/3/2024 New single SQL file now available with loads of sample data, please check Step 5
-## Getting started
-### 1. Clone the repo
+# Countryside Community Swimming Club Management System
 
-#### 1.1 Using GitHub Desktop
-Simply click `Code` and `Open with GitHub Desktop`, and save repo to your preferred location.
+The Countryside Community Swimming Club Management System is a comprehensive solution designed to streamline the operations of a community-based swimming club. The system automates membership management, class bookings, instructor scheduling, payments tracking, and much more, empowering members, instructors, and managers with role-based access to various functionalities.
 
-#### 1.2 Using command line
-1. Nagivate to where you would like to save the repo by using `cd your/path/`
-2. `git clone https://github.com/LUMasterOfAppliedComputing2024S1/COMP639S1_Group_AQ.git`
+## Getting Started
 
-### 2. Config `connect.py`
-Create `connect.py` under `scmsapp` folder with your database configuration. (sql script to create database will be provided later)
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-### 3. (Optional) create virtual environment
-1. Open your local repo folder with VS Code
-2. Open Command Pellete by pressing `Ctrl+Shift+P`
-3. Tpye in and select `Python: Create Environment`
-4. Select `Venv` and the Python version you want to use
+### Prerequisites
 
-### 4. Install dependancies
-1. After creating the environment, run Terminal: Create New Terminal or press `` Ctrl+Shift+` ``
-2. Enter command `pip install -r requirements.txt`
-3. All required dependancies should be installed one by one.
+Ensure you have the following installed:
+- Python 3.8 or above
+- MySQL
+- Git
 
-### 5. Create database
-All database related files are under `database` folder.
-* _New_ Run `scms.sql` in MySQL workbench. This drops existing database and create new database with all tables and over 6000 rows of data. 
-* You might need to remove the 1000-row limit in MySQL workbench > https://superuser.com/questions/240291/how-to-remove-1000-row-limit-in-mysql-workbench-queries
-* _20240408 Update_ Updated SQL with procedure and event to update membership status automatically. `Safe Updates` mode needs to be tunred of in MySQL workbench: Go to `Eidt` > `Peferences` > `SQL Editor` > Uncheck `Safe Updates` > Go to `Query` > `Reconnect to server`.
-* Below is old steps 
+### Installation
 
-~~1. Run `scmsdb.sql` in MySQL workbench. This will create the databse and all tables for you.~~
-~~For PythonAnywhere, run `scmsdb_pa.sql` after creating database using web UI~~
-~~2. Run `data.sql` in MySQL workbench. This will populate 27 sample users in the database.~~
-~~3. Run `data_step2.sql` in MySQL workbench. This will populate all other data.~~
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/LUMasterOfAppliedComputing2024S1/COMP639S1_Group_AQ.git
+   cd COMP639S1_Group_AQ
+   ```
+
+2. **Set up a virtual environment (Optional but recommended):**
+
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows use `.\venv\Scripts\activate`
+```
+
+3. **Install the dependencies:**
+```bash
+pip install -r requirements.txt
+```
+
+4. **Configure database settings:**
+
+Create a `connect.py` file under the `scmsapp` directory with your MySQL database credentials.
+
+5.**Initialize the database:**
+
+Run the `scms.sql` script in your MySQL workbench to set up the database schema and populate it with initial data.
 
 
-### 6. Create a New Branch and start coding
-* In GitHub Desktop, simply click Current branch and New branch
-* Commland line `git branch new-branch-name`
+### Configuration Tips
+- To handle more than 1000 rows in MySQL Workbench, adjust the settings as described [here](https://superuser.com/questions/240291/how-to-remove-1000-row-limit-in-mysql-workbench-queries).
+- Disable `Safe Updates` in MySQL Workbench for the SQL scripts to run properly.
 
-### 7. Test user accounts
-* Member: `member1` - `member20`
-* Instructor: `instructor1` - `instructor5`
-* Manager: `manager1` - `manager2`
-* All passwords are `Test1234` by default
+### Usage
+1. Start the server:
 
-## Overall structure 2024-03-12
-This is the overall structure of the webapp. 
-`run.py` is the entry point, and the package is sotred in `scmsapp` folder. 
+```bash
+python run.py
+```
+Access the web application by navigating to http://localhost:5000 in your web browser.
 
-### `scmsapp` folder
-* `__init__.py` is where the flask instance is created and all routes are imported
-* `secret.py` stores the app secret key
-* `connect.py` is also located here but added in .gitignore so you can setup your own db config
+2. Default Login Credentials:
 
-### `model` folder
-* All `py` files that handle interactions with the database, i.e. excuting sql queries.
-* As defined in `db.py`, query results are returned as dicintonaries rather than lists of tuples
-* `session.py` `allow_role(role_list: list)` is a simple utility to check if user is logged in and user role can access the page 
+- Members: member1 to member20 (Password: Test1234)
+- Instructors: instructor1 to instructor5 (Password: Test1234)
+- Managers: manager1 and manager2 (Password: Test1234)
 
-Other `py` files that handles non-routing functions, e.g. db connection, user authentication
 
-### `route` folder
-`py` files that only handle the routes of the app. For readablity and modulasation, it should have not any SQL queru and complex function 
+### Contributing
+Please create a branch for each new feature or improvement, commit your changes, and submit a pull request for review.
 
-### `static` folder
-For `javascript`, `css`, and images
+### Project Structure
+- `scmsapp`: Main application directory containing Flask setups, configurations, and blueprints.
+- `model/`: Includes Python models for database interactions.
+- `route/`: Flask routes that handle all the endpoint requests.
+- `static/`: Contains CSS, JS, and image files.
+- `templates/`: HTML templates for the application.
 
-### `templates` folder
-For `HTML` files. Subfolders should be created for pages in the same functionality  
+### Licence
+This project is licensed under the MIT License - see the LICENSE.md file for details.
+
+
+
+
+
+
+
+
