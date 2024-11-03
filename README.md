@@ -1,84 +1,123 @@
-# Countryside Community Swimming Club Management System
+# Swimming Club Management System (SCMS)
 
-The Countryside Community Swimming Club Management System is a comprehensive solution designed to streamline the operations of a community-based swimming club. The system automates membership management, class bookings, instructor scheduling, payments tracking, and much more, empowering members, instructors, and managers with role-based access to various functionalities.
+A comprehensive web-based management system built with Flask and MySQL to streamline operations for community swimming clubs. The system handles membership management, class bookings, instructor scheduling, facility management, and much more.
 
-## Getting Started
+## 🌟 Key Features
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+### For Members
+- Self-service membership registration and renewal
+- Class and lesson booking capabilities 
+- Personal dashboard with booking history
+- Profile management with health information
+- Customizable membership plans (Monthly/Annual)
 
-### Prerequisites
+### For Instructors
+- Personal schedule management
+- Class attendance tracking
+- Student progress monitoring
+- Profile and availability management
+- Direct communication with members
 
-Ensure you have the following installed:
-- Python 3.8 or above
-- MySQL
+### For Managers
+- Comprehensive membership oversight
+- Dynamic class scheduling and management
+- Facility and pool lane allocation
+- Financial reporting and analytics
+- Staff management tools
+- News and announcement system
+
+## 🛠️ Technology Stack
+
+- **Backend:** Python Flask
+- **Database:** MySQL
+- **Frontend:** HTML, CSS, JavaScript, Bootstrap
+- **Authentication:** Flask-Hashing
+- **Template Engine:** Jinja2
+
+## 📋 Prerequisites
+
+- Python 3.8+
+- MySQL Server
 - Git
 
-### Installation
+## ⚙️ Installation
 
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/LUMasterOfAppliedComputing2024S1/COMP639S1_Group_AQ.git
-   cd COMP639S1_Group_AQ
-   ```
-
-2. **Set up a virtual environment (Optional but recommended):**
-
+1. Clone the repository
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows use `.\venv\Scripts\activate`
+git clone https://github.com/ChanMeng666/Countryside-Community-Swimming-Club.git
+cd Countryside-Community-Swimming-Club
 ```
 
-3. **Install the dependencies:**
+2. Create and activate virtual environment (Optional but recommended)
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows use: .\venv\Scripts\activate
+```
+
+3. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Configure database settings:**
+4. Configure database connection
+- Create `connect.py` file in the `scmsapp` directory
+- Add your MySQL credentials
 
-Create a `connect.py` file under the `scmsapp` directory with your MySQL database credentials.
+5. Initialize database
+```bash
+mysql -u your_username -p < scms.sql
+```
 
-5.**Initialize the database:**
+## 🚀 Running the Application
 
-Run the `scms.sql` script in your MySQL workbench to set up the database schema and populate it with initial data.
-
-
-### Configuration Tips
-- To handle more than 1000 rows in MySQL Workbench, adjust the settings as described [here](https://superuser.com/questions/240291/how-to-remove-1000-row-limit-in-mysql-workbench-queries).
-- Disable `Safe Updates` in MySQL Workbench for the SQL scripts to run properly.
-
-### Usage
-1. Start the server:
-
+1. Start the server
 ```bash
 python run.py
 ```
-Access the web application by navigating to http://localhost:5000 in your web browser.
 
-2. Default Login Credentials:
+2. Access the application at `http://localhost:5000`
 
-- Members: member1 to member20 (Password: Test1234)
-- Instructors: instructor1 to instructor5 (Password: Test1234)
-- Managers: manager1 and manager2 (Password: Test1234)
+## 👥 Default Login Credentials
 
+- **Members:** member1 to member20 (Password: Test1234)
+- **Instructors:** instructor1 to instructor5 (Password: Test1234)
+- **Managers:** manager1 and manager2 (Password: Test1234)
 
-### Contributing
-Please create a branch for each new feature or improvement, commit your changes, and submit a pull request for review.
+## 📁 Project Structure
 
-### Project Structure
-- `scmsapp`: Main application directory containing Flask setups, configurations, and blueprints.
-- `model/`: Includes Python models for database interactions.
-- `route/`: Flask routes that handle all the endpoint requests.
-- `static/`: Contains CSS, JS, and image files.
-- `templates/`: HTML templates for the application.
+```
+swimming-club-management/
+├── scmsapp/
+│   ├── model/          # Database models and business logic
+│   ├── route/          # URL routing and view functions
+│   ├── static/         # CSS, JavaScript, and images
+│   └── templates/      # HTML templates
+├── requirements.txt    # Project dependencies
+├── run.py             # Application entry point
+└── scms.sql          # Database schema and initial data
+```
 
-### Licence
-This project is licensed under the MIT License - see the LICENSE.md file for details.
+## 🤝 Contributing
 
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
+## ⚠️ Important Notes
 
+- Adjust MySQL Workbench settings for handling large datasets (>1000 rows)
+- Disable 'Safe Updates' mode for proper SQL script execution
+- Ensure proper configuration of database credentials in connect.py
 
+## 🔑 Security Features
 
+- Password hashing using Flask-Hashing
+- Role-based access control
+- Session management
+- Input validation and sanitization
 
+## 📄 License
 
-
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
