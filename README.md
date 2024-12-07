@@ -1,26 +1,36 @@
-# Swimming Club Management System (SCMS)
+<div align="center">
+ <h1> 🏊‍♂️ Swimming Club Management System (SCMS)</h1>
+ <img src="https://img.shields.io/badge/Python-3.8+-blue.svg"/>
+ <img src="https://img.shields.io/badge/Flask-3.0.2-brightgreen.svg"/>
+ <img src="https://img.shields.io/badge/MySQL-8.3.0-orange.svg"/>
+ <img src="https://img.shields.io/badge/Bootstrap-Latest-purple.svg"/>
+ <img src="https://img.shields.io/badge/License-MIT-brightgreen.svg"/>
+</div>
+<br/>
 
-A comprehensive web-based management system built with Flask and MySQL to streamline operations for community swimming clubs. The system handles membership management, class bookings, instructor scheduling, facility management, and much more.
+# Overview
+SCMS is a comprehensive web-based management system built with Flask and MySQL to streamline operations for community swimming clubs. The system handles membership management, class bookings, instructor scheduling, facility management, payments, and administrative reporting - providing an all-in-one solution for swimming club operations.
 
-## 🌟 Key Features
+# ⭐ Key Features
 
-### For Members
+### 👥 For Members
 - Self-service membership registration and renewal
 - Class and lesson booking capabilities 
 - Personal dashboard with booking history
 - Profile management with health information
 - Customizable membership plans (Monthly/Annual)
+- Online payment processing
 
-### For Instructors
-- Personal schedule management
+### 🏅 For Instructors
+- Personal schedule management 
 - Class attendance tracking
 - Student progress monitoring
 - Profile and availability management
 - Direct communication with members
 
-### For Managers
+### 👨‍💼 For Managers
 - Comprehensive membership oversight
-- Dynamic class scheduling and management
+- Dynamic class scheduling and management 
 - Facility and pool lane allocation
 - Financial reporting and analytics
 - Staff management tools
@@ -28,24 +38,31 @@ A comprehensive web-based management system built with Flask and MySQL to stream
 
 ## 🛠️ Technology Stack
 
-- **Backend:** Python Flask
-- **Database:** MySQL
-- **Frontend:** HTML, CSS, JavaScript, Bootstrap
+- **Backend:** Python Flask 3.0.2
+- **Database:** MySQL 8.3.0
+- **Frontend:** HTML5, CSS3, JavaScript, Bootstrap
 - **Authentication:** Flask-Hashing
 - **Template Engine:** Jinja2
+- **Other Libraries:**
+  - mysql-connector-python 8.3.0
+  - werkzeug 3.0.1
+  - blinker 1.7.0
+  - click 8.1.7
+  - colorama 0.4.6
+  - itsdangerous 2.1.2
 
 ## 📋 Prerequisites
 
 - Python 3.8+
-- MySQL Server
+- MySQL Server 8.3.0+
 - Git
 
 ## ⚙️ Installation
 
 1. Clone the repository
 ```bash
-git clone https://github.com/ChanMeng666/Countryside-Community-Swimming-Club.git
-cd Countryside-Community-Swimming-Club
+git clone https://github.com/ChanMeng666/countryside-community-swimming-club.git
+cd countryside-community-swimming-club
 ```
 
 2. Create and activate virtual environment (Optional but recommended)
@@ -80,11 +97,10 @@ python run.py
 ## 👥 Default Login Credentials
 
 - **Members:** member1 to member20 (Password: Test1234)
-- **Instructors:** instructor1 to instructor5 (Password: Test1234)
+- **Instructors:** instructor1 to instructor5 (Password: Test1234) 
 - **Managers:** manager1 and manager2 (Password: Test1234)
 
 ## 📁 Project Structure
-
 ```
 swimming-club-management/
 ├── scmsapp/
@@ -97,6 +113,20 @@ swimming-club-management/
 └── scms.sql          # Database schema and initial data
 ```
 
+## 🔑 Security Features
+
+- Password hashing using Flask-Hashing
+- Role-based access control
+- Session management
+- Input validation and sanitization
+- Secure database operations
+
+## ⚠️ Important Notes
+
+- Adjust MySQL Workbench settings for handling large datasets (>1000 rows)
+- Disable 'Safe Updates' mode for proper SQL script execution
+- Ensure proper configuration of database credentials in connect.py
+
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -105,19 +135,10 @@ swimming-club-management/
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## ⚠️ Important Notes
+## 📝 License
 
-- Adjust MySQL Workbench settings for handling large datasets (>1000 rows)
-- Disable 'Safe Updates' mode for proper SQL script execution
-- Ensure proper configuration of database credentials in connect.py
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
-## 🔑 Security Features
+## 📧 Contact
 
-- Password hashing using Flask-Hashing
-- Role-based access control
-- Session management
-- Input validation and sanitization
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+For any queries or issues, please contact: ChanMeng666@outlook.com
