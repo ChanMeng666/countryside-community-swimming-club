@@ -142,3 +142,7 @@ This project is licensed under the Apache-2.0 license - see the [Apache-2.0 lice
 ## 📧 Contact
 
 For any queries or issues, please contact: ChanMeng666@outlook.com
+
+## 🙋‍♀ Author
+
+Created and maintained by [Chan Meng](https://github.com/ChanMeng666).
