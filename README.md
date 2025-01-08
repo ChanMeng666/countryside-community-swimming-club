@@ -8,6 +8,12 @@
 </div>
 <br/>
 
+<br/>
+
+[![Explore GitHub Profile README Generator](https://gradient-svg-generator.vercel.app/?text=👉+Explore+It+Now!+👈&height=40&template=pride-rainbow)](https://countryside-community-sw-6wqr4e1.gamma.site/)
+
+<br/>
+
 # Overview
 SCMS is a comprehensive web-based management system built with Flask and MySQL to streamline operations for community swimming clubs. The system handles membership management, class bookings, instructor scheduling, facility management, payments, and administrative reporting - providing an all-in-one solution for swimming club operations.
 
