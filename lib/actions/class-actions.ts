@@ -36,7 +36,7 @@ export async function createClass(data: {
     status: "active",
   });
 
-  revalidatePath("/timetable");
+  revalidatePath("/schedule");
   return { success: true };
 }
 
@@ -75,7 +75,7 @@ export async function updateClass(
     })
     .where(eq(swimmingClass.id, classId));
 
-  revalidatePath("/timetable");
+  revalidatePath("/schedule");
   return { success: true };
 }
 
@@ -87,7 +87,7 @@ export async function deleteClass(classId: number) {
     .set({ status: "cancelled" })
     .where(eq(swimmingClass.id, classId));
 
-  revalidatePath("/timetable");
+  revalidatePath("/schedule");
   return { success: true };
 }
 

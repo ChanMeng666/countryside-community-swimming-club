@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { buttonVariants } from "@/components/ui/button";
+import { LinkButton } from "@/components/link-button";
 import Link from "next/link";
 
 export default async function InstructorsPage() {
@@ -41,7 +41,7 @@ export default async function InstructorsPage() {
                 <TableCell>{i.phone}</TableCell>
                 <TableCell>{i.position}</TableCell>
                 <TableCell>
-                  <Link href={`/users/instructors/${i.id}`} className={buttonVariants({ size: "sm", variant: "outline" })}>View</Link>
+                  <LinkButton href={`/users/instructors/${i.id}`} size="sm" variant="outline">View</LinkButton>
                 </TableCell>
               </TableRow>
             ))}

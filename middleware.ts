@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 
 const protectedPaths = [
   "/dashboard",
+  "/schedule",
   "/booking",
   "/membership",
   "/profile",
@@ -39,6 +40,7 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/dashboard/:path*",
+    "/schedule/:path*",
     "/booking/:path*",
     "/membership/:path*",
     "/profile/:path*",

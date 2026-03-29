@@ -24,7 +24,7 @@ export async function bookClass(classId: number) {
       await tx.insert(booking).values({ memberId, classId, status: "booked", isAttended: false });
     });
 
-    revalidatePath("/timetable");
+    revalidatePath("/schedule");
     revalidatePath("/booking");
     return { success: true };
   } catch (e) {
@@ -49,7 +49,7 @@ export async function cancelBooking(bookingId: number, classId: number) {
       await tx.update(swimmingClass).set({ openSlot: sql`${swimmingClass.openSlot} + 1` }).where(eq(swimmingClass.id, classId));
     });
 
-    revalidatePath("/timetable");
+    revalidatePath("/schedule");
     revalidatePath("/booking");
     return { success: true };
   } catch (e) {

@@ -16,9 +16,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { buttonVariants } from "@/components/ui/button";
+import { LinkButton } from "@/components/link-button";
 import { formatDate, formatTime } from "@/lib/utils";
-import Link from "next/link";
 
 export default async function AttendancePage() {
   const session = await requireRole(["instructor", "manager"]);
@@ -106,7 +105,7 @@ export default async function AttendancePage() {
               <TableCell>{c.locationName}</TableCell>
               <TableCell>{c.bookingCount}</TableCell>
               <TableCell>
-                <Link href={`/attendance/${c.id}`} className={buttonVariants({ size: "sm", variant: "outline" })}>Mark</Link>
+                <LinkButton href={`/attendance/${c.id}`} size="sm" variant="outline">Mark</LinkButton>
               </TableCell>
             </TableRow>
           ))}

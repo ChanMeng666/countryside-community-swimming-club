@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { LinkButton } from "@/components/link-button";
 import Link from "next/link";
 
 export default async function MembersPage() {
@@ -48,7 +48,7 @@ export default async function MembersPage() {
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <Link href={`/users/members/${m.id}`} className={buttonVariants({ size: "sm", variant: "outline" })}>View</Link>
+                  <LinkButton href={`/users/members/${m.id}`} size="sm" variant="outline">View</LinkButton>
                 </TableCell>
               </TableRow>
             ))}
