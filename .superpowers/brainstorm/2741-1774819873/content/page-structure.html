@@ -1,0 +1,119 @@
+<h2>Page Structure & Routing</h2>
+<p class="subtitle">Next.js App Router — route groups for public, auth, and dashboard</p>
+
+<div class="section">
+  <div class="mockup">
+    <div class="mockup-header">Next.js App Router File Structure</div>
+    <div class="mockup-body" style="font-family: monospace; font-size: 12px; line-height: 1.7; padding: 20px;">
+      <pre style="margin:0; white-space: pre;">
+app/
+├── layout.tsx                    # Root layout (HTML, fonts, providers)
+├── page.tsx                      # Landing page (public home)
+│
+├── (public)/                     # Public route group (no auth required)
+│   ├── layout.tsx                # Public layout (navbar, footer)
+│   ├── timetable/
+│   │   └── page.tsx              # Public timetable (FullCalendar, read-only)
+│   ├── courses/
+│   │   └── page.tsx              # Course descriptions
+│   ├── instructors/
+│   │   └── page.tsx              # Instructor profiles
+│   └── news/
+│       ├── page.tsx              # News list
+│       └── [id]/page.tsx         # News detail
+│
+├── (auth)/                       # Auth route group
+│   ├── layout.tsx                # Centered card layout
+│   ├── login/page.tsx            # Login form
+│   └── register/page.tsx         # Registration form
+│
+├── (dashboard)/                  # Protected route group (auth required)
+│   ├── layout.tsx                # Dashboard layout (sidebar + topbar)
+│   ├── dashboard/page.tsx        # Role-based dashboard home
+│   │
+│   ├── booking/                  # Member booking
+│   │   └── page.tsx              # View & manage bookings
+│   ├── membership/
+│   │   └── page.tsx              # Membership status & payments
+│   ├── profile/
+│   │   └── page.tsx              # Edit profile & change password
+│   │
+│   ├── timetable/                # Interactive timetable (FullCalendar)
+│   │   ├── page.tsx              # Calendar view + booking actions
+│   │   └── manage/page.tsx       # Manager: add/edit classes
+│   │
+│   ├── attendance/
+│   │   ├── page.tsx              # View attendance overview
+│   │   └── [classId]/page.tsx    # Mark attendance for a class
+│   │
+│   ├── users/                    # Manager: user management
+│   │   ├── members/
+│   │   │   ├── page.tsx          # List all members
+│   │   │   └── [id]/page.tsx     # View/edit member
+│   │   └── instructors/
+│   │       ├── page.tsx          # List all instructors
+│   │       └── [id]/page.tsx     # View/edit instructor
+│   │
+│   ├── settings/                 # Manager settings
+│   │   ├── class-types/page.tsx  # Manage class types
+│   │   ├── locations/page.tsx    # Manage pool/lanes
+│   │   └── pricing/page.tsx      # Manage products/pricing
+│   │
+│   ├── reports/
+│   │   └── page.tsx              # Financial, attendance, popularity reports
+│   │
+│   └── news/
+│       └── manage/page.tsx       # Manager: create/edit news
+│
+├── api/                          # API routes
+│   ├── auth/[...all]/route.ts    # Better Auth catch-all handler
+│   └── classes/
+│       └── overlap/route.ts      # Class overlap check endpoint
+│
+└── lib/                          # Shared utilities
+    ├── db/
+    │   ├── schema.ts             # Drizzle schema definitions
+    │   ├── index.ts              # DB connection (Neon)
+    │   └── queries/              # Reusable query functions
+    ├── auth.ts                   # Better Auth config
+    ├── auth-client.ts            # Better Auth client
+    └── utils.ts                  # Shared helpers
+      </pre>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Route Groups Explained</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+    <div style="background: rgba(96,165,250,0.1); border-radius: 8px; padding: 14px;">
+      <h4 style="margin:0 0 8px; color: #60a5fa;">(public)</h4>
+      <p style="font-size: 13px; margin:0; color: #94a3b8;">No auth required. Simple navbar + footer layout. Visitors can browse timetable, courses, instructors, news.</p>
+    </div>
+    <div style="background: rgba(250,204,21,0.1); border-radius: 8px; padding: 14px;">
+      <h4 style="margin:0 0 8px; color: #facc15;">(auth)</h4>
+      <p style="font-size: 13px; margin:0; color: #94a3b8;">Login & register pages. Centered card layout. Redirects to dashboard if already logged in.</p>
+    </div>
+    <div style="background: rgba(52,211,153,0.1); border-radius: 8px; padding: 14px;">
+      <h4 style="margin:0 0 8px; color: #34d399;">(dashboard)</h4>
+      <p style="font-size: 13px; margin:0; color: #94a3b8;">Auth required. Sidebar navigation. Role-based access — pages show/hide based on user role.</p>
+    </div>
+  </div>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="approve" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content">
+      <h3>Page structure looks good</h3>
+      <p>Continue to UI layout design</p>
+    </div>
+  </div>
+  <div class="option" data-choice="changes" onclick="toggleSelect(this)">
+    <div class="letter">✎</div>
+    <div class="content">
+      <h3>Need changes</h3>
+      <p>I want to modify the routing or page structure</p>
+    </div>
+  </div>
+</div>

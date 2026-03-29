@@ -1,0 +1,92 @@
+<h2>System Architecture Overview</h2>
+<p class="subtitle">Full Next.js rewrite — Countryside Community Swimming Club</p>
+
+<div class="section">
+  <div class="mockup">
+    <div class="mockup-header">Architecture Diagram</div>
+    <div class="mockup-body" style="font-family: monospace; font-size: 13px; line-height: 1.6; padding: 24px;">
+      <pre style="margin:0; white-space: pre;">
+┌─────────────────────────────────────────────────────────────────┐
+│                        HEROKU                                   │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                    Next.js 15 App                         │  │
+│  │                                                           │  │
+│  │  ┌─────────────┐  ┌──────────────┐  ┌────────────────┐  │  │
+│  │  │   App Router │  │ Server       │  │  API Routes    │  │  │
+│  │  │   (Pages)    │  │ Actions      │  │  /api/*        │  │  │
+│  │  │             │  │ (Mutations)  │  │  (REST/JSON)   │  │  │
+│  │  └──────┬──────┘  └──────┬───────┘  └───────┬────────┘  │  │
+│  │         │                │                   │           │  │
+│  │  ┌──────┴────────────────┴───────────────────┴────────┐  │  │
+│  │  │              Drizzle ORM (Type-safe)                │  │  │
+│  │  └────────────────────────┬───────────────────────────┘  │  │
+│  │                           │                              │  │
+│  │  ┌────────────────────────┴───────────────────────────┐  │  │
+│  │  │              Better Auth (Sessions)                 │  │  │
+│  │  │         Role-based: manager / instructor / member   │  │  │
+│  │  └────────────────────────┬───────────────────────────┘  │  │
+│  └───────────────────────────┼───────────────────────────────┘  │
+│                              │                                   │
+└──────────────────────────────┼───────────────────────────────────┘
+                               │ PostgreSQL connection (pooled)
+                               ▼
+                    ┌──────────────────────┐
+                    │   Neon Database      │
+                    │   (PostgreSQL)       │
+                    │                      │
+                    │  Tables:             │
+                    │  • user / session    │
+                    │  • member            │
+                    │  • instructor        │
+                    │  • manager           │
+                    │  • class / booking   │
+                    │  • payment / product │
+                    │  • location / news   │
+                    └──────────────────────┘
+      </pre>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Tech Stack Summary</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 16px;">
+      <h4 style="margin-top:0; color: #60a5fa;">Frontend</h4>
+      <ul style="margin:0; padding-left: 20px;">
+        <li>Next.js 15 (App Router)</li>
+        <li>React 19 + Server Components</li>
+        <li>Tailwind CSS 4</li>
+        <li>shadcn/ui components</li>
+        <li>FullCalendar (React)</li>
+      </ul>
+    </div>
+    <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 16px;">
+      <h4 style="margin-top:0; color: #34d399;">Backend</h4>
+      <ul style="margin:0; padding-left: 20px;">
+        <li>Next.js API Routes + Server Actions</li>
+        <li>Drizzle ORM</li>
+        <li>Better Auth</li>
+        <li>Neon PostgreSQL (serverless)</li>
+        <li>Heroku deployment</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="approve" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content">
+      <h3>Looks good</h3>
+      <p>This architecture works for my needs</p>
+    </div>
+  </div>
+  <div class="option" data-choice="changes" onclick="toggleSelect(this)">
+    <div class="letter">✎</div>
+    <div class="content">
+      <h3>Need changes</h3>
+      <p>I have questions or want to modify something</p>
+    </div>
+  </div>
+</div>

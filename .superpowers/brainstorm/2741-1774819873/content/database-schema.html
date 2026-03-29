@@ -1,0 +1,127 @@
+<h2>Database Schema Design (Neon PostgreSQL + Drizzle)</h2>
+<p class="subtitle">Migrating from MySQL — maintaining all relationships, modernizing types</p>
+
+<div class="section">
+  <div class="mockup">
+    <div class="mockup-header">Entity Relationship Overview</div>
+    <div class="mockup-body" style="font-family: monospace; font-size: 12px; line-height: 1.5; padding: 20px;">
+      <pre style="margin:0; white-space: pre;">
+  ┌──────────────┐         ┌───────────────┐
+  │ Better Auth  │         │   classType   │
+  │   Tables     │         │───────────────│
+  │──────────────│         │ id            │
+  │ user         │         │ type (enum)   │
+  │ session      │         │ name          │
+  │ account      │         │ description   │
+  │ verification │         └───────┬───────┘
+  └──────┬───────┘                 │
+         │ userId                  │ classTypeId
+         ▼                         ▼
+  ┌──────────────┐         ┌───────────────┐      ┌──────────────┐
+  │   member     │         │    class      │◄─────│   location   │
+  │──────────────│         │───────────────│      │──────────────│
+  │ id           │         │ id            │      │ id           │
+  │ userId (FK)  │         │ instructorId  │      │ poolName     │
+  │ firstName    │         │ locationId    │      │ laneName     │
+  │ lastName     │         │ classTypeId   │      │ status       │
+  │ phone, email │         │ startTime     │      └──────────────┘
+  │ dob, address │         │ endTime       │
+  │ healthInfo   │         │ openSlot      │
+  │ membershipType│        │ status        │
+  │ expiredDate  │         └───────┬───────┘
+  │ image        │                 │
+  └──────┬───────┘                 │
+         │                         │
+         │    ┌────────────────────┘
+         │    │
+         ▼    ▼
+  ┌──────────────┐         ┌───────────────┐
+  │   booking    │         │   payment     │
+  │──────────────│         │───────────────│
+  │ id           │         │ id            │
+  │ memberId(FK) │         │ productId(FK) │
+  │ classId (FK) │         │ bookingId(FK) │
+  │ createdAt    │         │ memberId (FK) │
+  │ status       │         │ total         │
+  │ isAttended   │         │ paidAt        │
+  └──────────────┘         │ isPaid        │
+                           └───────────────┘
+  ┌──────────────┐         ┌───────────────┐
+  │  instructor  │         │   product     │
+  │──────────────│         │───────────────│
+  │ id           │         │ id            │
+  │ userId (FK)  │         │ name          │
+  │ title        │         │ description   │
+  │ firstName    │         │ price         │
+  │ lastName     │         └───────────────┘
+  │ position     │
+  │ phone, email │         ┌───────────────┐
+  │ profile      │         │    news       │
+  │ image        │         │───────────────│
+  └──────────────┘         │ id            │
+                           │ authorId (FK) │
+  ┌──────────────┐         │ title         │
+  │   manager    │         │ content       │
+  │──────────────│         │ createdAt     │
+  │ id           │         └───────────────┘
+  │ userId (FK)  │
+  │ title        │
+  │ firstName    │
+  │ lastName     │
+  │ position     │
+  │ phone, email │
+  └──────────────┘
+      </pre>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Key Changes from MySQL</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+    <div style="background: rgba(239,68,68,0.1); border-left: 3px solid #ef4444; padding: 12px 16px; border-radius: 0 8px 8px 0;">
+      <h4 style="margin-top:0; color: #ef4444;">Old (MySQL)</h4>
+      <ul style="margin:0; padding-left: 20px; font-size: 14px;">
+        <li>Custom user table with password+salt</li>
+        <li>Manual session management</li>
+        <li>ENUM strings in MySQL</li>
+        <li>Raw SQL queries everywhere</li>
+        <li>No foreign key constraints enforced</li>
+        <li>DATETIME columns</li>
+      </ul>
+    </div>
+    <div style="background: rgba(52,211,153,0.1); border-left: 3px solid #34d399; padding: 12px 16px; border-radius: 0 8px 8px 0;">
+      <h4 style="margin-top:0; color: #34d399;">New (PostgreSQL + Drizzle)</h4>
+      <ul style="margin:0; padding-left: 20px; font-size: 14px;">
+        <li>Better Auth manages user/session/account</li>
+        <li>Automatic session handling + JWT</li>
+        <li>PostgreSQL enums (pgEnum)</li>
+        <li>Type-safe Drizzle queries</li>
+        <li>Proper FK constraints with ON DELETE</li>
+        <li>TIMESTAMPTZ columns (timezone-aware)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Better Auth Integration</h3>
+  <p style="font-size: 14px; color: #94a3b8;">Better Auth auto-creates <code>user</code>, <code>session</code>, <code>account</code>, and <code>verification</code> tables. We extend the <code>user</code> table with a <code>role</code> field (member/instructor/manager). Profile tables (member, instructor, manager) link to the auth user via <code>userId</code> foreign key.</p>
+</div>
+
+<div class="options">
+  <div class="option" data-choice="approve" onclick="toggleSelect(this)">
+    <div class="letter">✓</div>
+    <div class="content">
+      <h3>Schema looks good</h3>
+      <p>Proceed to the next design section</p>
+    </div>
+  </div>
+  <div class="option" data-choice="changes" onclick="toggleSelect(this)">
+    <div class="letter">✎</div>
+    <div class="content">
+      <h3>Need changes</h3>
+      <p>I want to modify the schema design</p>
+    </div>
+  </div>
+</div>

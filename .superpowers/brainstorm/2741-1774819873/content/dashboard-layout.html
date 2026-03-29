@@ -1,0 +1,117 @@
+<h2>Dashboard Layout Design</h2>
+<p class="subtitle">Choose your preferred layout style for the authenticated dashboard area</p>
+
+<div class="cards">
+  <div class="card" data-choice="sidebar-classic" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 16px;">
+      <div style="display: flex; height: 280px; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+        <!-- Sidebar -->
+        <div style="width: 220px; background: #0f172a; padding: 16px; flex-shrink: 0;">
+          <div style="font-size: 14px; font-weight: 700; color: #60a5fa; margin-bottom: 20px;">🏊 SCMS</div>
+          <div style="font-size: 11px; color: #475569; text-transform: uppercase; margin-bottom: 8px;">Menu</div>
+          <div style="background: rgba(96,165,250,0.15); border-radius: 6px; padding: 8px 10px; font-size: 12px; color: #60a5fa; margin-bottom: 4px;">📅 Timetable</div>
+          <div style="padding: 8px 10px; font-size: 12px; color: #94a3b8; margin-bottom: 4px;">📋 Bookings</div>
+          <div style="padding: 8px 10px; font-size: 12px; color: #94a3b8; margin-bottom: 4px;">💳 Membership</div>
+          <div style="padding: 8px 10px; font-size: 12px; color: #94a3b8; margin-bottom: 4px;">📊 Attendance</div>
+          <div style="font-size: 11px; color: #475569; text-transform: uppercase; margin: 16px 0 8px;">Manager</div>
+          <div style="padding: 8px 10px; font-size: 12px; color: #94a3b8; margin-bottom: 4px;">👥 Users</div>
+          <div style="padding: 8px 10px; font-size: 12px; color: #94a3b8; margin-bottom: 4px;">📰 News</div>
+          <div style="padding: 8px 10px; font-size: 12px; color: #94a3b8; margin-bottom: 4px;">⚙️ Settings</div>
+          <div style="padding: 8px 10px; font-size: 12px; color: #94a3b8;">📈 Reports</div>
+        </div>
+        <!-- Main content area -->
+        <div style="flex: 1; background: #1e293b;">
+          <!-- Top bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.06);">
+            <div style="font-size: 14px; font-weight: 600; color: #f1f5f9;">Timetable</div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 28px; height: 28px; background: #334155; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #94a3b8;">🔔</div>
+              <div style="width: 28px; height: 28px; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: white;">JD</div>
+            </div>
+          </div>
+          <!-- Content mock -->
+          <div style="padding: 20px;">
+            <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px;">
+              <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Mon</div>
+              <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Tue</div>
+              <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Wed</div>
+              <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Thu</div>
+              <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Fri</div>
+              <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Sat</div>
+              <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Sun</div>
+            </div>
+            <div style="background: rgba(96,165,250,0.1); border-left: 3px solid #3b82f6; border-radius: 0 4px 4px 0; padding: 6px 8px; margin-bottom: 6px;">
+              <div style="font-size: 10px; color: #60a5fa;">9:00 - Beginner Swimming</div>
+              <div style="font-size: 9px; color: #475569;">Lane 1 · John Smith</div>
+            </div>
+            <div style="background: rgba(52,211,153,0.1); border-left: 3px solid #34d399; border-radius: 0 4px 4px 0; padding: 6px 8px; margin-bottom: 6px;">
+              <div style="font-size: 10px; color: #34d399;">10:30 - Advanced Training</div>
+              <div style="font-size: 9px; color: #475569;">Lane 2 · Jane Doe</div>
+            </div>
+            <div style="background: rgba(250,204,21,0.1); border-left: 3px solid #facc15; border-radius: 0 4px 4px 0; padding: 6px 8px;">
+              <div style="font-size: 10px; color: #facc15;">14:00 - 1-on-1 Lesson</div>
+              <div style="font-size: 9px; color: #475569;">Lane 3 · Mike Wilson</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Classic Sidebar (Recommended)</h3>
+      <p>Fixed sidebar with collapsible sections by role. Clean, familiar pattern. Sidebar collapses to icons on mobile.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="topnav-tabs" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding: 16px;">
+      <div style="height: 280px; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); background: #1e293b;">
+        <!-- Top nav -->
+        <div style="background: #0f172a; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 20px;">
+            <div style="font-size: 14px; font-weight: 700; color: #60a5fa;">🏊 SCMS</div>
+            <div style="display: flex; gap: 4px;">
+              <div style="padding: 6px 12px; font-size: 11px; color: #60a5fa; background: rgba(96,165,250,0.15); border-radius: 6px;">Timetable</div>
+              <div style="padding: 6px 12px; font-size: 11px; color: #94a3b8;">Bookings</div>
+              <div style="padding: 6px 12px; font-size: 11px; color: #94a3b8;">Membership</div>
+              <div style="padding: 6px 12px; font-size: 11px; color: #94a3b8;">Attendance</div>
+              <div style="padding: 6px 12px; font-size: 11px; color: #94a3b8;">More ▾</div>
+            </div>
+          </div>
+          <div style="width: 28px; height: 28px; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; color: white;">JD</div>
+        </div>
+        <!-- Breadcrumb -->
+        <div style="padding: 12px 20px; font-size: 11px; color: #475569; border-bottom: 1px solid rgba(255,255,255,0.06);">
+          Dashboard / <span style="color: #94a3b8;">Timetable</span>
+        </div>
+        <!-- Content -->
+        <div style="padding: 20px;">
+          <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 12px;">
+            <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Mon</div>
+            <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Tue</div>
+            <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Wed</div>
+            <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Thu</div>
+            <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Fri</div>
+            <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Sat</div>
+            <div style="text-align: center; font-size: 9px; color: #475569; padding: 4px;">Sun</div>
+          </div>
+          <div style="background: rgba(96,165,250,0.1); border-left: 3px solid #3b82f6; border-radius: 0 4px 4px 0; padding: 6px 8px; margin-bottom: 6px;">
+            <div style="font-size: 10px; color: #60a5fa;">9:00 - Beginner Swimming</div>
+            <div style="font-size: 9px; color: #475569;">Lane 1 · John Smith</div>
+          </div>
+          <div style="background: rgba(52,211,153,0.1); border-left: 3px solid #34d399; border-radius: 0 4px 4px 0; padding: 6px 8px; margin-bottom: 6px;">
+            <div style="font-size: 10px; color: #34d399;">10:30 - Advanced Training</div>
+            <div style="font-size: 9px; color: #475569;">Lane 2 · Jane Doe</div>
+          </div>
+          <div style="background: rgba(250,204,21,0.1); border-left: 3px solid #facc15; border-radius: 0 4px 4px 0; padding: 6px 8px;">
+            <div style="font-size: 10px; color: #facc15;">14:00 - 1-on-1 Lesson</div>
+            <div style="font-size: 9px; color: #475569;">Lane 3 · Mike Wilson</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Top Navigation</h3>
+      <p>Horizontal top nav with tabs. More content width but harder to fit many menu items. Uses "More" dropdown for overflow.</p>
+    </div>
+  </div>
+</div>
