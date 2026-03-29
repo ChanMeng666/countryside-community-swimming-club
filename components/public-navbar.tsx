@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 export function PublicNavbar() {
   return (
@@ -11,7 +11,7 @@ export function PublicNavbar() {
           <Link href="/courses" className="text-sm text-muted-foreground hover:text-foreground">Courses</Link>
           <Link href="/instructors" className="text-sm text-muted-foreground hover:text-foreground">Instructors</Link>
           <Link href="/news" className="text-sm text-muted-foreground hover:text-foreground">News</Link>
-          <Button asChild size="sm"><Link href="/login">Sign In</Link></Button>
+          <Link href="/login" className={buttonVariants({ size: "sm" })}>Sign In</Link>
         </div>
       </div>
     </nav>

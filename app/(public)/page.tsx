@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Users, Award } from "lucide-react";
 
@@ -15,8 +15,8 @@ export default function HomePage() {
             Join our community and enjoy swimming lessons, group sessions, and private coaching for all skill levels.
           </p>
           <div className="mt-8 flex gap-4 justify-center">
-            <Button asChild size="lg"><Link href="/register">Join Now</Link></Button>
-            <Button asChild variant="outline" size="lg"><Link href="/timetable">View Timetable</Link></Button>
+            <Link href="/register" className={buttonVariants({ size: "lg" })}>Join Now</Link>
+            <Link href="/timetable" className={buttonVariants({ variant: "outline", size: "lg" })}>View Timetable</Link>
           </div>
         </div>
       </section>

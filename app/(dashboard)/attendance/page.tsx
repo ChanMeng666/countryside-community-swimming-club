@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { formatDate, formatTime } from "@/lib/utils";
 import Link from "next/link";
 
@@ -106,9 +106,7 @@ export default async function AttendancePage() {
               <TableCell>{c.locationName}</TableCell>
               <TableCell>{c.bookingCount}</TableCell>
               <TableCell>
-                <Button asChild size="sm" variant="outline">
-                  <Link href={`/attendance/${c.id}`}>Mark</Link>
-                </Button>
+                <Link href={`/attendance/${c.id}`} className={buttonVariants({ size: "sm", variant: "outline" })}>Mark</Link>
               </TableCell>
             </TableRow>
           ))}
