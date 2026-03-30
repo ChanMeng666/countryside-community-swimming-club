@@ -748,7 +748,7 @@ This project is licensed under the Apache-2.0 License - see the [LICENSE](LICENS
 [back-to-top]: https://img.shields.io/badge/-BACK_TO_TOP-151515?style=flat-square
 
 <!-- Project Links -->
-[demo-link]: https://countryside-community-sw-6wqr4e1.gamma.site/
+[demo-link]: https://scms-countryside-50e91aae3add.herokuapp.com/
 [docs]: https://github.com/ChanMeng666/countryside-community-swimming-club#readme
 [github-issues-link]: https://github.com/ChanMeng666/countryside-community-swimming-club/issues
 
