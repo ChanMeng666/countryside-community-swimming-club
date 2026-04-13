@@ -1,0 +1,37 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "countryside-swimming-club",
+  "compatibility_date": "2025-04-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  // Required by OpenNext for internal routing (middleware invocation, etc.)
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "countryside-swimming-club"
+    }
+  ],
+  // Incremental cache storage
+  "r2_buckets": [
+    {
+      "binding": "NEXT_INC_CACHE_R2_BUCKET",
+      "bucket_name": "countryside-swimming-club-cache"
+    }
+  ],
+  // Tag-based revalidation (revalidatePath/revalidateTag)
+  "d1_databases": [
+    {
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "countryside-swimming-club-tags",
+      "database_id": "c4163a53-41ce-4a78-9fb5-971be4eb6863"
+    }
+  ],
+  "vars": {
+    "BETTER_AUTH_URL": "https://countryside-swimming-club.chanmeng-dev.workers.dev",
+    "NEXT_PUBLIC_APP_URL": "https://countryside-swimming-club.chanmeng-dev.workers.dev"
+  }
+}

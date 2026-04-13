@@ -1,13 +1,13 @@
 "use server";
 
-import { dbPool } from "@/lib/db/transaction";
+import { db } from "@/lib/db";
 import { news, manager } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth-utils";
 
 export async function getAllNews() {
-  const rows = await dbPool
+  const rows = await db
     .select({
       id: news.id,
       title: news.title,
@@ -27,7 +27,7 @@ export async function getAllNews() {
 }
 
 export async function getNewsById(id: number) {
-  const [row] = await dbPool
+  const [row] = await db
     .select({
       id: news.id,
       title: news.title,
@@ -51,7 +51,7 @@ export async function getNewsById(id: number) {
 export async function createNews(data: { title: string; content: string }) {
   const session = await requireRole(["manager"]);
 
-  const [mgr] = await dbPool
+  const [mgr] = await db
     .select({ id: manager.id })
     .from(manager)
     .where(eq(manager.userId, session.user.id));
@@ -59,7 +59,7 @@ export async function createNews(data: { title: string; content: string }) {
   if (!mgr) return { error: "Manager profile not found" };
 
   try {
-    await dbPool.insert(news).values({
+    await db.insert(news).values({
       authorId: mgr.id,
       title: data.title,
       content: data.content,
@@ -77,7 +77,7 @@ export async function deleteNews(id: number) {
   await requireRole(["manager"]);
 
   try {
-    await dbPool.delete(news).where(eq(news.id, id));
+    await db.delete(news).where(eq(news.id, id));
 
     revalidatePath("/news");
     revalidatePath("/news/manage");

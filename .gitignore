@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# OpenNext / Cloudflare
+.open-next/
+
 # superpowers
 .superpowers/
 
