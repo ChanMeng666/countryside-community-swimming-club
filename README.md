@@ -394,3 +394,18 @@ This project is licensed under the Apache-2.0 License - see the [LICENSE](LICENS
 [github-issues-shield]: https://img.shields.io/github/issues/ChanMeng666/countryside-community-swimming-club?color=ff80eb&labelColor=black&style=flat-square
 [github-license-shield]: https://img.shields.io/badge/license-Apache--2.0-white?labelColor=black&style=flat-square
 [github-license-link]: https://github.com/ChanMeng666/countryside-community-swimming-club/blob/main/LICENSE
+
+---
+
+<!-- CHAN MENG PERSONAL BRAND -->
+<div align="center">
+  <a href="https://github.com/ChanMeng666" target="_blank">
+    <img src="./.github/brand/chan-meng-logo.svg" alt="Chan Meng" width="160" />
+  </a>
+
+  <p><strong>Chan Meng</strong><br/>Need a custom app like this one? I build them — let's talk.</p>
+
+  <a href="mailto:chanmeng.dev@gmail.com"><img src="https://img.shields.io/badge/Email-chanmeng.dev@gmail.com-EA4335?style=flat-square&logo=gmail&logoColor=white" alt="Email Chan Meng"/></a>
+  <a href="https://github.com/ChanMeng666"><img src="https://img.shields.io/badge/GitHub-ChanMeng666-181717?style=flat-square&logo=github&logoColor=white" alt="Chan Meng on GitHub"/></a>
+</div>
+<!-- /CHAN MENG PERSONAL BRAND -->

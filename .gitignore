@@ -39,6 +39,9 @@ yarn-error.log*
 # OpenNext / Cloudflare
 .open-next/
 
+# Cloudflare Wrangler local state & build artifacts
+.wrangler/
+
 # superpowers
 .superpowers/
 
