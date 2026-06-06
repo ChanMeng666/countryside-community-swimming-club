@@ -42,6 +42,10 @@ yarn-error.log*
 # Cloudflare Wrangler local state & build artifacts
 .wrangler/
 
+# Wrangler local dev secrets
+.dev.vars
+.dev.vars.*
+
 # superpowers
 .superpowers/
 
